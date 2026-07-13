@@ -1280,8 +1280,59 @@
             font-size: 0.85rem;
         }
 
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.4s var(--ease-out);
+            z-index: 90;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--black);
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+        }
+
+        .back-to-top svg {
+            transition: transform 0.3s var(--ease-out);
+        }
+
+        .back-to-top:hover svg {
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .back-to-top {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 44px;
+                height: 44px;
+            }
+
             .section {
                 padding: 3.5rem 1.5rem;
             }
@@ -1913,6 +1964,13 @@
         <p>© 2026 朱戬. 用代码与思考构建更好的产品。</p>
     </footer>
 
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top" aria-label="回到顶部">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6"/>
+        </svg>
+    </button>
+
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
@@ -2020,11 +2078,23 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: canvas, 
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
             antialias: true,
-            alpha: true 
+            alpha: true
         });
+
+        // Lighting for solid materials
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0xfff5f0, 0.4);
+        fillLight.position.set(-5, 0, -5);
+        scene.add(fillLight);
         
         const dpr = Math.min(window.devicePixelRatio, 2);
         renderer.setPixelRatio(dpr);
@@ -2043,11 +2113,14 @@
 
         for (let i = 0; i < 12; i++) {
             const geometry = geometries[i % geometries.length];
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x0a0a0a,
-                wireframe: true,
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xe8e6e3,
+                roughness: 0.6,
+                metalness: 0.1,
+                clearcoat: 0.3,
+                clearcoatRoughness: 0.4,
                 transparent: true,
-                opacity: 0.15
+                opacity: 0.85
             });
             const mesh = new THREE.Mesh(geometry, material);
             
@@ -2792,6 +2865,26 @@
                 }
             });
         }
+    })();
+
+    // ============================================
+    // BACK TO TOP
+    // ============================================
+    (function initBackToTop() {
+        const backToTop = document.getElementById('back-to-top');
+        if (!backToTop) return;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > window.innerHeight * 0.8) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     })();
 
     // Fallback: ensure all content is visible if GSAP fails
