@@ -410,12 +410,18 @@
         .hero-title .accent::after {
             content: '';
             position: absolute;
-            bottom: 0.1em;
-            left: 0;
-            width: 100%;
-            height: 6px;
+            bottom: -0.15em;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
             background: var(--black);
-            opacity: 0.15;
+            opacity: 0.35;
+            transition: width 0.5s var(--ease-out);
+        }
+
+        .hero-title .accent:hover::after {
+            width: 100%;
         }
 
         .hero-subtitle {
@@ -1584,7 +1590,7 @@
             <div class="work-group" data-group="0">
                 <div class="work-group-header" onclick="toggleGroup(this)">
                     <div class="work-group-left">
-                        <div class="work-group-company">【待补充公司名称】</div>
+                        <div class="work-group-company">武汉优联前端科技有限公司</div>
                         <div class="work-group-role">产品助理 · 待补充规模</div>
                     </div>
                     <div class="work-group-right">
@@ -2025,6 +2031,18 @@
             antialias: true,
             alpha: true 
         });
+
+        // Lighting for solid materials
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0xe8e6e3, 0.25);
+        fillLight.position.set(-5, 0, -5);
+        scene.add(fillLight);
         
         const dpr = Math.min(window.devicePixelRatio, 2);
         renderer.setPixelRatio(dpr);
@@ -2043,11 +2061,14 @@
 
         for (let i = 0; i < 12; i++) {
             const geometry = geometries[i % geometries.length];
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x0a0a0a,
-                wireframe: true,
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xc5c2bd,
+                roughness: 0.55,
+                metalness: 0.15,
+                clearcoat: 0.2,
+                clearcoatRoughness: 0.5,
                 transparent: true,
-                opacity: 0.15
+                opacity: 0.9
             });
             const mesh = new THREE.Mesh(geometry, material);
             
@@ -2075,8 +2096,8 @@
                 originalX: mesh.position.x,
                 originalY: mesh.position.y,
                 originalZ: mesh.position.z,
-                parallaxX: (Math.random() - 0.5) * 0.5,
-                parallaxY: (Math.random() - 0.5) * 0.3
+                parallaxX: (Math.random() - 0.5) * 1.2,
+                parallaxY: (Math.random() - 0.5) * 0.8
             };
             
             scene.add(mesh);
@@ -2365,7 +2386,7 @@
     const projects = [
         {
             title: '待补充项目名称',
-            company: '【待补充公司名称】',
+            company: '武汉优联前端科技有限公司',
             role: '产品助理',
             period: '202X — 202X',
             tags: ['产品', '待补充'],
