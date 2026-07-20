@@ -2335,6 +2335,34 @@
     }
 
     // ============================================
+    // MOBILE FALLBACK: ensure all GSAP-hidden content is visible
+    // ============================================
+    setTimeout(() => {
+        if (window.innerWidth < 1024) {
+            document.querySelectorAll('.skill-item, .work-group, .about-avatar-wrap, .about-quote, .about-bio > *, .about-stat, .contact-inner > *').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    }, 500);
+
+    // Safety net: force visible when in viewport on mobile
+    if (window.innerWidth < 1024 && 'IntersectionObserver' in window) {
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'none';
+                }
+            });
+        }, { threshold: 0.05 });
+
+        document.querySelectorAll('.skill-item, .work-group, .about-stat, .contact-inner > *').forEach(el => {
+            mobileObserver.observe(el);
+        });
+    }
+
+    // ============================================
     // WORK GROUP TOGGLE
     // ============================================
     function toggleGroup(headerEl) {
