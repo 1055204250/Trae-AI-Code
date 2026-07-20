@@ -2304,7 +2304,10 @@
                 ease: 'power3.out',
                 scrollTrigger: {
                     trigger: '.skills-grid',
-                    start: 'top 75%'
+                    start: function() {
+                        return window.innerWidth < 768 ? 'top 95%' : 'top 90%';
+                    },
+                    once: true
                 }
             }
         );
@@ -2320,7 +2323,10 @@
                 ease: 'power3.out',
                 scrollTrigger: {
                     trigger: '.contact-inner',
-                    start: 'top 70%'
+                    start: function() {
+                        return window.innerWidth < 768 ? 'top 95%' : 'top 70%';
+                    },
+                    once: true
                 }
             }
         );
