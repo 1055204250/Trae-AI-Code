@@ -2840,12 +2840,18 @@
         });
         
         function animate() {
-            // 半透明覆盖层让旧轨迹自然淡出
-            ctx.fillStyle = 'rgba(250, 250, 250, 0.22)';
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            // 用 destination-out 模式让旧轨迹自然淡出（不覆盖背景）
+            if (trail.length > 0) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+                ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+                ctx.globalCompositeOperation = 'source-over';
+            } else {
+                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            }
             
+            // 更新轨迹点
             if (pendingX !== null && pendingX > -50 && pendingY > -50) {
-                // 大跳跃插值补点，每段 <= 25px
                 const dx = pendingX - lastDrawnX;
                 const dy = pendingY - lastDrawnY;
                 const dist = Math.hypot(dx, dy);
@@ -2862,11 +2868,9 @@
                 lastDrawnY = pendingY;
                 pendingX = null;
             } else if (pendingX !== null && pendingX < -50) {
-                // 鼠标离开：清空
                 trail.length = 0;
                 pendingX = null;
             } else {
-                // 静止：缓慢淡出
                 if (trail.length > 0) trail.shift();
             }
             
@@ -2875,7 +2879,7 @@
                 return;
             }
             
-            // 绘制轨迹（用 lineTo，不用 quadratic 曲线）
+            // 绘制轨迹
             ctx.beginPath();
             ctx.moveTo(trail[0].x, trail[0].y);
             for (let i = 1; i < trail.length; i++) {
