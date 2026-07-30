@@ -868,6 +868,230 @@
             transform: translateX(0);
         }
 
+        /* ============ Youlian Featured Styles ============ */
+        .work-group--featured {
+            border: 2px solid var(--black);
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+        }
+
+        .work-group--featured .work-group-header {
+            background: linear-gradient(135deg, var(--black) 0%, #1a1a1a 100%);
+        }
+
+        .work-group--featured .work-group-company {
+            color: var(--white);
+        }
+
+        .work-group--featured .work-group-role {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .work-group--featured .work-group-period {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .work-group--featured .work-group-toggle {
+            background: transparent;
+            border-color: rgba(255,255,255,0.3);
+            color: var(--white);
+        }
+
+        .work-group--featured .work-group-header:hover .work-group-toggle {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .work-group--featured .work-group-header::after {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 4px;
+        }
+
+        /* Category Filter */
+        .ul-category-filter {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding: 1.5rem 0 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .ul-cat-btn {
+            padding: 0.55rem 1.25rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 100px;
+            background: var(--white);
+            color: var(--gray-500);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ul-cat-btn:hover {
+            border-color: var(--black);
+            color: var(--black);
+            transform: translateY(-1px);
+        }
+
+        .ul-cat-btn.active {
+            background: var(--black);
+            border-color: var(--black);
+            color: var(--white);
+        }
+
+        /* Timeline */
+        .ul-timeline {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .ul-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.6rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gray-300) 0%, var(--gray-200) 100%);
+        }
+
+        .ul-timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+        }
+
+        .ul-timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .ul-timeline-item.hidden {
+            display: none;
+        }
+
+        .ul-timeline-dot {
+            position: absolute;
+            left: -2.25rem;
+            top: 1.25rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--black);
+            z-index: 1;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ul-timeline-item:hover .ul-timeline-dot {
+            transform: scale(1.3);
+            background: var(--black);
+            box-shadow: 0 0 0 6px rgba(10,10,10,0.1);
+        }
+
+        .ul-timeline-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ul-timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s var(--ease-out);
+        }
+
+        .ul-timeline-card:hover {
+            transform: translateX(6px) translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            border-color: var(--gray-300);
+        }
+
+        .ul-timeline-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .ul-timeline-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .ul-timeline-date {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            letter-spacing: 0.05em;
+        }
+
+        .ul-timeline-cat {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 100px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .ul-timeline-cat.game { background: #fff0f5; color: #e91e63; }
+        .ul-timeline-cat.screen { background: #e8f5e9; color: #2e7d32; }
+        .ul-timeline-cat.miniprogram { background: #e3f2fd; color: #1565c0; }
+        .ul-timeline-cat.website { background: #fff8e1; color: #f57f17; }
+
+        .ul-timeline-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--black);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+
+        .ul-timeline-desc {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .ul-timeline-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .ul-timeline-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            color: var(--gray-500);
+        }
+
         /* Project Detail Modal */
         .project-detail {
             position: fixed;
@@ -1057,6 +1281,146 @@
             background: var(--white);
             color: var(--black);
             border-color: var(--white);
+        }
+
+        /* Stacked Card Carousel (Style 3) */
+        .project-carousel {
+            position: relative;
+            height: 380px;
+            margin-bottom: 3rem;
+            perspective: 1200px;
+        }
+
+        .project-carousel-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 65%;
+            max-width: 520px;
+            height: 320px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--gray-700);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            transform-origin: center center;
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-card-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: rgba(255,255,255,0.3);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .carousel-card[data-pos="0"] {
+            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+            z-index: 30;
+            opacity: 1;
+        }
+
+        .carousel-card[data-pos="1"] {
+            transform: translate(-18%, -50%) scale(0.82) rotateY(-12deg);
+            z-index: 20;
+            opacity: 0.7;
+        }
+
+        .carousel-card[data-pos="-1"] {
+            transform: translate(-82%, -50%) scale(0.82) rotateY(12deg);
+            z-index: 20;
+            opacity: 0.7;
+        }
+
+        .carousel-card[data-pos="2"] {
+            transform: translate(5%, -50%) scale(0.68) rotateY(-18deg);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .carousel-card[data-pos="-2"] {
+            transform: translate(-105%, -50%) scale(0.68) rotateY(18deg);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .carousel-card[data-pos="hidden"] {
+            transform: translate(-50%, -50%) scale(0.5);
+            z-index: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.4);
+            color: var(--white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-nav:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev { left: 2%; }
+        .carousel-nav.next { right: 2%; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 40;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: var(--white);
+            width: 24px;
+            border-radius: 4px;
         }
 
         /* Skills Section */
@@ -1406,6 +1770,82 @@
             .work-year { grid-column: 1; grid-row: 3; text-align: left; }
             .work-arrow { grid-column: 2; grid-row: 3 / 5; align-self: center; opacity: 1; transform: none; }
 
+            /* Youlian Mobile Styles */
+            .ul-category-filter {
+                gap: 0.5rem;
+                padding: 1rem 0 1.5rem;
+                justify-content: center;
+            }
+
+            .ul-cat-btn {
+                padding: 0.45rem 0.9rem;
+                font-size: 0.78rem;
+            }
+
+            .ul-timeline {
+                padding-left: 1.75rem;
+                margin-top: 1.5rem;
+            }
+
+            .ul-timeline::before {
+                left: 0.4rem;
+            }
+
+            .ul-timeline-dot {
+                left: -1.65rem;
+                top: 1rem;
+                width: 14px;
+                height: 14px;
+                border-width: 2.5px;
+            }
+
+            .ul-timeline-card {
+                padding: 1.15rem 1.25rem;
+                border-radius: 12px;
+            }
+
+            .ul-timeline-card:hover {
+                transform: translateX(3px) translateY(-1px);
+            }
+
+            .ul-timeline-meta {
+                gap: 0.6rem;
+            }
+
+            .ul-timeline-title {
+                font-size: 1.05rem;
+            }
+
+            .ul-timeline-desc {
+                font-size: 0.82rem;
+                -webkit-line-clamp: 3;
+            }
+
+            .ul-timeline-tags {
+                gap: 0.3rem;
+            }
+
+            .ul-timeline-tag {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            /* Carousel Mobile */
+            .project-carousel {
+                height: 260px;
+            }
+
+            .carousel-card {
+                width: 80%;
+                height: 220px;
+            }
+
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
             .project-detail-content {
                 padding: 4rem 1.5rem 2rem;
             }
@@ -1603,12 +2043,12 @@
             <span class="line">与作品。</span>
         </h2>
         <div class="work-groups">
-            <!-- Group 1 -->
-            <div class="work-group" data-group="0">
+            <!-- Group 1: 武汉优联前端科技有限公司 (重点展示) -->
+            <div class="work-group work-group--featured" data-group="0">
                 <div class="work-group-header" onclick="toggleGroup(this)">
                     <div class="work-group-left">
                         <div class="work-group-company">武汉优联前端科技有限公司</div>
-                        <div class="work-group-role">产品助理 · 待补充规模</div>
+                        <div class="work-group-role">产品助理 · 50-150人 · 民营公司</div>
                     </div>
                     <div class="work-group-right">
                         <div class="work-group-period">2023.04 — 2026.07</div>
@@ -1618,15 +2058,18 @@
                     </div>
                 </div>
                 <div class="work-group-list">
-                    <div class="work-item" onclick="openProject(0)">
-                        <span class="work-num">01</span>
-                        <span class="work-title">待补充项目名称</span>
-                        <div class="work-tags">
-                            <span class="work-tag">产品</span>
-                            <span class="work-tag">待补充</span>
-                        </div>
-                        <div><span class="work-year">202X — 202X</span></div>
-                        <span class="work-arrow">→</span>
+                    <!-- Category Filter -->
+                    <div class="ul-category-filter" id="ul-category-filter">
+                        <button class="ul-cat-btn active" data-cat="all">全部</button>
+                        <button class="ul-cat-btn" data-cat="game">🎮 游戏/H5</button>
+                        <button class="ul-cat-btn" data-cat="screen">📺 智慧大屏</button>
+                        <button class="ul-cat-btn" data-cat="miniprogram">📱 小程序</button>
+                        <button class="ul-cat-btn" data-cat="website">🌐 官网定制</button>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="ul-timeline" id="ul-timeline">
+                        <!-- Timeline items will be rendered by JS -->
                     </div>
                 </div>
             </div>
@@ -2442,6 +2885,259 @@
     }
 
     // ============================================
+    // YOULIAN FEATURED PROJECTS
+    // ============================================
+    const youlianProjects = [
+        // 游戏/H5
+        {
+            id: 'y01',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2024.03 — 2024.04',
+            title: '诗韵黄鹤楼H5',
+            desc: '探索千年诗韵，翱翔黄鹤之巅。继"诗意黄鹤"之后，再次以黄鹤楼为灵感，打造"穿越千年 解锁你的前世文豪身份"互动体验游戏。',
+            tags: ['H5互动', '文化传播', '游戏化'],
+            link: 'https://case.ufrontend.com/miniprogram/officialaccounts/shiyunhuanghelou/index.html',
+            images: [],
+            overview: '继"诗意黄鹤"之后，再次以黄鹤楼为灵感，打造"穿越千年 解锁你的前世文豪身份"互动体验游戏。通过创新的互动方式，让用户深入体验黄鹤楼的历史与文化，同时弘扬武汉的丰富文化遗产。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y02',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2025.03 — 2025.04',
+            title: '康之泉水乐园互动H5',
+            desc: '夏日畅游季·水上嘉年华，将互动体验与水上乐园结合，为用户带来无限体验感和乐趣的水上游乐园之旅。',
+            tags: ['品牌合作', 'H5游戏', '娱乐营销'],
+            link: 'https://case.ufrontend.com/miniprogram/officialaccounts/kangzhiquan/index.html',
+            images: [],
+            overview: '优联前端团队通过精心的设计与创意的实施，"康之泉"微信小游戏成功地将传统文化与现代互动体验相结合，为用户带来了一场无限体验感和乐趣的水上乐园之旅。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        // 智慧大屏
+        {
+            id: 'y03',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.07 — 2024.08',
+            title: '光谷云智慧大屏',
+            desc: '集地图、3D城市模型和动效于一体的综合性展示平台，为用户提供直观、生动的数据可视化体验。',
+            tags: ['Echarts', '3D模型', '数据可视化'],
+            link: 'https://case.ufrontend.com/qichuang/opticalvalleycloud/#/operation',
+            images: [],
+            overview: '光谷云智慧大屏是一个集地图、3D城市模型和动效于一体的综合性展示平台。通过合理规划界面布局，将元素有机融合，营造和谐统一的视觉效果，通过前沿的前端技术和创新的设计元素，提供直观、生动的数据可视化体验。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y04',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.08 — 2024.09',
+            title: '花山数据中心配电大屏',
+            desc: '集设备告警、场景联动、视频监控与配电运维为一体的综合展示平台，与启创动力二次深度合作。',
+            tags: ['数据中心', '配电运维', '告警联动'],
+            link: 'https://case.ufrontend.com/qichuang/huashan_ui/#/dashboard',
+            images: [],
+            overview: '武汉启创动力与优联前端正式签约合作，共同推进花山数据中心智慧运维大屏项目。双方继2023年8月合作光谷云智慧大屏项目后的第二次深度合作，为花山数据中心打造集设备告警、场景联动、视频监控与配电运维为一体的综合展示平台。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y05',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2025.09 — 2025.10',
+            title: '湖北省旅游指挥中心大屏',
+            desc: '集景区热度排行、历史客流、客源分布、游客画像、客流趋势预测的综合性展示平台。',
+            tags: ['文旅大数据', '地图下钻', '客流预测'],
+            link: 'https://case.ufrontend.com/uf/bigscreen/hubei_tour_screen/',
+            images: [],
+            overview: '湖北文旅指挥中心大屏是一个集景区热度排行、历史客流、客源分布、获客排行、游客画像、客流趋势预测的综合性展示平台。通过"直观、动态、智能"的设计理念，结合地图分层下钻、丰富的图表样式与设计动效，为用户呈现清晰、直观、易理解的客流分布情况。',
+            highlights: ['前期调研与资料收集', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y06',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.10 — 2025.01',
+            title: '中建四局智控大屏',
+            desc: '集能耗分析和智能调优等功能于一体的综合性展示平台，中建四局智能运营管理系统。',
+            tags: ['能耗分析', '智能调优', '运营管理'],
+            link: 'https://case.ufrontend.com/qichuang/cfibms_ui/#/eca',
+            images: [],
+            overview: '中建四局智能运营管理系统(CFIBMS)是一个集能耗分析和智能调优等功能于一体的综合性展示平台。通过合理规划界面布局，将元素有机融合，通过合理的排版和配色，营造出和谐、统一的视觉效果。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '后续优化需求对接', '研发跟进与测试']
+        },
+        // 小程序
+        {
+            id: 'y07',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2026.04 — 2026.07',
+            title: '智卜卜H5&小程序',
+            desc: '面向普通用户的塔罗解读类应用，支持微信小程序与H5网页双端运行，AI塔罗会话+会员体系。',
+            tags: ['AI塔罗', '会员付费', '双端运行'],
+            link: 'https://www.zhibbu.cn/',
+            images: [],
+            overview: '智卜卜是一款面向普通用户的塔罗解读类应用，支持微信小程序与H5网页双端运行。以塔罗牌阵为核心，提供免费解读、会员专属权益、星火激励体系、分享邀请裂变等功能。包含全类型牌阵（单张牌、三牌阵、四要素、恋爱圣三角、事业金三角、凯尔特十字等），支持洗牌、抽牌、摆牌、翻牌、解牌及追问。',
+            highlights: ['前期项目调研与需求分析', '需求文档制作与设计稿功能确认', '开发计划制定', '项目跟进', '全流程系统测试', '软著申请']
+        },
+        {
+            id: 'y08',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2024.05',
+            title: '黄鹤楼导游地图小程序',
+            desc: '适配小程序与Web端的智慧导览平台，集地图、景点信息、导航指引、讲解播放于一体。',
+            tags: ['地图导览', '智慧旅游', '音频讲解'],
+            link: 'https://case.ufrontend.com/uf/webgis/index.html',
+            images: [],
+            overview: '黄鹤楼景区智慧导览图，集地图、景点信息、动画贴图、导航指引以及讲解播放等多功能于一体。平台内置了专业的讲解音频资源，涵盖了黄鹤楼的历史沿革、建筑风格、文化内涵等方面，游客可根据兴趣选择不同的讲解内容收听。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y09',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2024.10 — 2025.11',
+            title: '问津书院小程序',
+            desc: '古典国韵风格的导览平台，精心设计动态日升月落视觉效果，根据设备时间自动调整。',
+            tags: ['国韵风格', '动态视觉', '导览平台'],
+            images: [],
+            overview: '问津书院小程序采用古典国韵风格，设计主线贯穿千年历史底蕴。精心设计动态日升月落视觉效果，根据用户设备时间自动调整，提供与现实世界同步的视觉体验，显著提升游客沉浸感。成为功能丰富、界面美观、交互便捷且充满创意的导览平台。',
+            highlights: ['需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y10',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2025.07 — 2025.08',
+            title: '英维克产品选项小程序',
+            desc: '将"重型工业运维"抽象为"一键选型"的数字化选型平台，海量设备与上千SKU场景。',
+            tags: ['工业温控', '数字化选型', '参数对比'],
+            images: [],
+            overview: '"英维克产品选型工具"小程序案例，在海量设备与上千SKU的工业温控场景中，将"重型工业运维"抽象为"一键选型"，打造"数字化选型平台"。通过结构化参数筛选与对比，让专业技术拥有"轻量容器"，帮助客户与一线销售在数秒内锁定最匹配的产品。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '与设计对接确认设计稿UI与功能', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        // 官网定制
+        {
+            id: 'y11',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2025.03',
+            title: '星福医疗官网定制',
+            desc: '医疗行业高端网站建设，加入DNA、细胞粒子等效果，极大增强现代感、科技感与医疗领域关联性。',
+            tags: ['粒子特效', '创意网站', '医疗科技'],
+            link: 'https://case.ufrontend.com/uf/medical',
+            images: [],
+            overview: '在医疗行业高端网站建设中，加入DNA、细胞粒子等效果可以极大增强网站的现代感、科技感以及与医疗领域的关联性。通过这些元素的引入，有效提升网站的视觉吸引力，同时突出其专业性和前沿性。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y12',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2026.01 — 2026.03',
+            title: 'Paxgon官网定制',
+            desc: '与马来西亚多元化顶级创意机构Paxgon签署合作，品牌形象数字化升级，前端技术与创意营销深度融合。',
+            tags: ['国际合作', '品牌升级', '创意营销'],
+            link: 'https://www.paxgon.com/',
+            images: [],
+            overview: '武汉优联前端与马来西亚多元化顶级创意机构Paxgon签署合作协议，正式承担Paxgon官网升级项目的设计与开发。在数字化浪潮席卷全球的今天，品牌建设不再是单一的视觉呈现，而是注重沉浸式体验与高效交互的综合体，这次合作是前端技术与创意营销深度融合的典范。',
+            highlights: ['与设计对接确认设计稿UI与功能', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y13',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2024.04',
+            title: '九州商务官网定制',
+            desc: '结合香港移民政策，设计创意的动效和互动功能，为用户带来专业、直观、互动、创新的浏览体验。',
+            tags: ['创意网站', '定制化', '动效交互'],
+            link: 'https://www.jzswu.com/',
+            images: [],
+            overview: '优联前端为九州商务设计开发的九州商务移民网站，通过结合香港移民政策，设计创意的动效和互动功能，提升网站的整体吸引力，为用户带来了专业、直观、互动、创新的浏览体验。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y14',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2024.12',
+            title: '深规院定制官网',
+            desc: '以粒子动画的形式展示深规院数字城市设计研究中心的业务板块，强化品牌印象与技术实力。',
+            tags: ['粒子动画', '品牌展示', '技术实力'],
+            link: 'https://case.ufrontend.com/uf/urban',
+            images: [],
+            overview: '深规院数字城市设计研究中心官网，以粒子动画的形式展示业务板块。不仅能够有效地传达各个业务板块及其重要性，同时也强化了观众对其品牌印象，展示了其在数字城市设计领域中的领导地位和技术实力。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试']
+        }
+    ];
+
+    // Category labels map
+    const catLabelMap = {
+        all: '全部',
+        game: '游戏/H5',
+        screen: '智慧大屏',
+        miniprogram: '小程序',
+        website: '官网定制'
+    };
+
+    // Sort projects by date descending
+    youlianProjects.sort((a, b) => {
+        const dateA = a.date.split(' — ')[0];
+        const dateB = b.date.split(' — ')[0];
+        return dateB.localeCompare(dateA);
+    });
+
+    // Render Youlian timeline
+    function renderYoulianTimeline(filter = 'all') {
+        const timeline = document.getElementById('ul-timeline');
+        if (!timeline) return;
+
+        const filtered = filter === 'all'
+            ? youlianProjects
+            : youlianProjects.filter(p => p.cat === filter);
+
+        timeline.innerHTML = filtered.map((p, i) => `
+            <div class="ul-timeline-item" data-cat="${p.cat}" style="transition-delay: ${i * 0.08}s">
+                <div class="ul-timeline-dot"></div>
+                <div class="ul-timeline-card" onclick="openYoulianProject('${p.id}')">
+                    <div class="ul-timeline-meta">
+                        <span class="ul-timeline-date">${p.date}</span>
+                        <span class="ul-timeline-cat ${p.cat}">${p.catLabel}</span>
+                    </div>
+                    <div class="ul-timeline-title">${p.title}</div>
+                    <div class="ul-timeline-desc">${p.desc}</div>
+                    <div class="ul-timeline-tags">
+                        ${p.tags.map(t => `<span class="ul-timeline-tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Animate in
+        setTimeout(() => {
+            document.querySelectorAll('.ul-timeline-item').forEach((item, i) => {
+                setTimeout(() => item.classList.add('visible'), i * 80);
+            });
+        }, 50);
+    }
+
+    // Category filter handler
+    function initYoulianFilter() {
+        const filterBtns = document.querySelectorAll('.ul-cat-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.cat;
+                renderYoulianTimeline(cat);
+            });
+        });
+    }
+
+    // ============================================
     // WORK GROUP TOGGLE
     // ============================================
     function toggleGroup(headerEl) {
@@ -2491,6 +3187,12 @@
                 list.style.maxHeight = '3000px';
             }
         });
+
+        // Init Youlian timeline & filter
+        setTimeout(() => {
+            renderYoulianTimeline();
+            initYoulianFilter();
+        }, 100);
     }
 
     // ============================================
@@ -2737,6 +3439,159 @@
                 </button>
             </div>
         `;
+
+        if (panel.classList.contains('open')) {
+            inner.style.transition = 'none';
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(30px)';
+            void inner.offsetWidth;
+            inner.style.transition = '';
+            inner.style.opacity = '';
+            inner.style.transform = '';
+        } else {
+            panel.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Stacked Card Carousel
+    let carouselState = { current: 0, images: [] };
+
+    function initCarousel(images) {
+        carouselState.images = images.length > 0 ? images : ['placeholder'];
+        carouselState.current = 0;
+        renderCarousel();
+    }
+
+    function renderCarousel() {
+        const track = document.querySelector('.project-carousel-track');
+        const indicators = document.querySelector('.carousel-indicators');
+        if (!track) return;
+
+        const imgs = carouselState.images;
+        const total = imgs.length;
+
+        track.innerHTML = imgs.map((img, i) => {
+            const isPlaceholder = img === 'placeholder';
+            return `
+                <div class="carousel-card" data-index="${i}" onclick="goToSlide(${i})">
+                    ${isPlaceholder 
+                        ? '<div class="carousel-card-placeholder">暂无项目图片<br>上传图片后将在此展示</div>'
+                        : `<img src="${img}" alt="项目图片 ${i + 1}" loading="lazy">`
+                    }
+                </div>
+            `;
+        }).join('');
+
+        // Update positions
+        updateCarouselPositions();
+
+        // Indicators
+        if (indicators) {
+            indicators.innerHTML = imgs.map((_, i) => 
+                `<div class="carousel-dot ${i === carouselState.current ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+            ).join('');
+        }
+    }
+
+    function updateCarouselPositions() {
+        const cards = document.querySelectorAll('.carousel-card');
+        const total = cards.length;
+        if (total === 0) return;
+
+        cards.forEach((card, i) => {
+            let offset = i - carouselState.current;
+            if (offset > total / 2) offset -= total;
+            if (offset < -total / 2) offset += total;
+
+            if (Math.abs(offset) <= 2) {
+                card.dataset.pos = offset;
+            } else {
+                card.dataset.pos = 'hidden';
+            }
+        });
+    }
+
+    function nextSlide() {
+        carouselState.current = (carouselState.current + 1) % carouselState.images.length;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function prevSlide() {
+        carouselState.current = (carouselState.current - 1 + carouselState.images.length) % carouselState.images.length;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function goToSlide(index) {
+        carouselState.current = index;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function updateIndicators() {
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === carouselState.current);
+        });
+    }
+
+    // Open Youlian project
+    function openYoulianProject(id) {
+        const project = youlianProjects.find(p => p.id === id);
+        if (!project) return;
+
+        const panel = document.getElementById('project-detail');
+        const inner = document.getElementById('project-detail-inner');
+
+        inner.innerHTML = `
+            <div class="project-detail-meta">
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">所属公司</span>
+                    <span class="project-detail-meta-value">武汉优联前端科技有限公司</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">项目类型</span>
+                    <span class="project-detail-meta-value">${project.catLabel}</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">时间</span>
+                    <span class="project-detail-meta-value">${project.date}</span>
+                </div>
+            </div>
+            <h2 class="project-detail-title">${project.title}</h2>
+            <div class="project-detail-tags">
+                ${project.tags.map(tag => `<span class="project-detail-tag">${tag}</span>`).join('')}
+            </div>
+
+            <!-- Stacked Card Carousel -->
+            <div class="project-carousel">
+                <div class="project-carousel-track"></div>
+                <button class="carousel-nav prev" onclick="prevSlide(event)">‹</button>
+                <button class="carousel-nav next" onclick="nextSlide(event)">›</button>
+                <div class="carousel-indicators"></div>
+            </div>
+
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">项目概述</div>
+                <p>${project.overview}</p>
+            </div>
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">核心职责与成果</div>
+                <ul>
+                    ${project.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+            </div>
+            ${project.link ? `
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">访问链接</div>
+                <a href="${project.link}" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline; word-break: break-all;">${project.link}</a>
+            </div>
+            ` : ''}
+        `;
+
+        // Init carousel
+        setTimeout(() => initCarousel(project.images || []), 50);
 
         if (panel.classList.contains('open')) {
             inner.style.transition = 'none';
