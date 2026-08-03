@@ -1917,6 +1917,79 @@
             .about-info-grid {
                 grid-template-columns: 1fr;
             }
+
+            /* Youlian 480px Styles */
+            .ul-category-filter {
+                gap: 0.35rem;
+                padding: 0.75rem 0 1.25rem;
+            }
+
+            .ul-cat-btn {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.72rem;
+            }
+
+            .ul-timeline {
+                padding-left: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .ul-timeline::before {
+                left: 0.3rem;
+            }
+
+            .ul-timeline-dot {
+                left: -1.4rem;
+                width: 12px;
+                height: 12px;
+            }
+
+            .ul-timeline-card {
+                padding: 1rem;
+            }
+
+            .ul-timeline-title {
+                font-size: 0.95rem;
+            }
+
+            .ul-timeline-desc {
+                font-size: 0.78rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .ul-timeline-tag {
+                font-size: 0.6rem;
+                padding: 0.15rem 0.4rem;
+            }
+
+            /* Carousel 480px */
+            .project-carousel {
+                height: 260px;
+            }
+
+            .carousel-card {
+                width: 85%;
+                height: 220px;
+            }
+
+            .carousel-nav {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+
+            .project-detail-content {
+                padding: 3.5rem 1rem 1.5rem;
+            }
+
+            .project-detail-close {
+                right: 1rem;
+                top: 0.75rem;
+            }
+
+            .project-detail-title {
+                font-size: 1.4rem;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -3388,7 +3461,7 @@
 
         // Init Youlian timeline & filter
         setTimeout(() => {
-            renderYoulianTimeline();
+            renderYoulianTimeline('game');
             initYoulianFilter();
         }, 100);
     }
@@ -3710,13 +3783,15 @@
         });
     }
 
-    function nextSlide() {
+    function nextSlide(e) {
+        if (e) e.stopPropagation();
         carouselState.current = (carouselState.current + 1) % carouselState.images.length;
         updateCarouselPositions();
         updateIndicators();
     }
 
-    function prevSlide() {
+    function prevSlide(e) {
+        if (e) e.stopPropagation();
         carouselState.current = (carouselState.current - 1 + carouselState.images.length) % carouselState.images.length;
         updateCarouselPositions();
         updateIndicators();
