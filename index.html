@@ -1,0 +1,4078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朱戬 — 产品经理 / 测试工程师</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --font-display: 'Space Grotesk', 'Inter', 'Noto Sans SC', sans-serif;
+            --font-body: 'Inter', 'Noto Sans SC', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Mouse trail canvas */
+        #mouse-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s var(--ease-out), visibility 0.8s;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-percent {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .preloader-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 1.5rem;
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 1px;
+            background: var(--gray-700);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preloader-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--white);
+            transition: width 0.1s linear;
+        }
+
+        /* Logo & Menu */
+        .logo {
+            position: fixed;
+            top: 1.5rem;
+            left: 2rem;
+            z-index: 100;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+            color: var(--black);
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out);
+            padding: 0.6rem 1.25rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .logo.dark {
+            color: var(--white);
+            background: rgba(20, 20, 20, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-btn {
+            position: fixed;
+            top: 1.25rem;
+            right: 2rem;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .menu-btn:hover {
+            background: var(--black);
+            border-color: var(--black);
+            transform: scale(1.05);
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 18px;
+            height: 1.5px;
+            background: var(--black);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .menu-btn:hover span {
+            background: var(--white);
+        }
+
+        .menu-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        }
+
+        .menu-btn.active span {
+            background: var(--black);
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: translateY(3.75px) rotate(45deg);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            transform: translateY(-3.75px) rotate(-45deg);
+        }
+
+        /* Navigation Panel */
+        .nav-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            transform: translateX(100%);
+            transition: transform 0.6s var(--ease-out);
+            padding: 6rem 3rem 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-panel.open {
+            transform: translateX(0);
+        }
+
+        .nav-links {
+            list-style: none;
+            margin-bottom: auto;
+        }
+
+        .nav-links li {
+            overflow: hidden;
+        }
+
+        .nav-links a {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.75rem 0;
+            letter-spacing: -0.02em;
+            transform: translateX(60px);
+            opacity: 0;
+            transition: transform 0.4s var(--ease-out), opacity 0.4s ease;
+            position: relative;
+        }
+
+        .nav-panel.open .nav-links a {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .nav-panel.open .nav-links li:nth-child(1) a { transition-delay: 0.1s; }
+        .nav-panel.open .nav-links li:nth-child(2) a { transition-delay: 0.15s; }
+        .nav-panel.open .nav-links li:nth-child(3) a { transition-delay: 0.2s; }
+        .nav-panel.open .nav-links li:nth-child(4) a { transition-delay: 0.25s; }
+
+        .nav-links a::before {
+            content: attr(data-num);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--gray-500);
+            margin-right: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .nav-links a:hover {
+            transform: translateX(10px);
+        }
+
+        .nav-social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .nav-social-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-social-links a:hover {
+            color: var(--white);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-num {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .section-title .line {
+            display: block;
+            transform: translateY(0);
+            transition: transform 0.8s var(--ease-out);
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: left;
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 4rem;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--ease-out) 1s forwards;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 100px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title-line {
+            overflow: hidden;
+            display: block;
+        }
+
+        .hero-title-line span {
+            display: block;
+            transform: translateY(0);
+            transition: transform 0.8s var(--ease-out);
+        }
+
+        .hero-title-line.visible span {
+            transform: translateY(0);
+        }
+
+        .hero-title .accent {
+            font-weight: 700;
+            color: var(--black);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title .accent::after {
+            content: '';
+            position: absolute;
+            bottom: -0.15em;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--black);
+            opacity: 0.35;
+            transition: width 0.5s var(--ease-out);
+        }
+
+        .hero-title .accent:hover::after {
+            width: 100%;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            color: var(--gray-500);
+            max-width: 560px;
+            margin: 0 0 3rem 0;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--ease-out) 1.3s forwards;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 100px;
+            transition: all 0.3s var(--ease-out);
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--ease-out) 1.5s forwards;
+            float: right;
+            margin-top: 0.5rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .hero-cta .arrow {
+            transition: transform 0.3s var(--ease-out);
+        }
+
+        .hero-cta:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--ease-out) 2s forwards;
+        }
+
+        .hero-scroll-text {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .hero-scroll-line {
+            width: 1px;
+            height: 60px;
+            background: var(--gray-300);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        /* About Section */
+        .about-top {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 4rem;
+            align-items: start;
+            margin-bottom: 4rem;
+        }
+
+        .about-avatar-wrap {
+            position: sticky;
+            top: 120px;
+        }
+
+        .about-avatar {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            border-radius: 2px;
+            background: var(--gray-100);
+        }
+
+        .about-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: grayscale(15%);
+            transition: filter 0.4s ease, transform 0.6s var(--ease-out);
+        }
+
+        .about-avatar:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.02);
+        }
+
+        .about-avatar-ring {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid var(--black);
+            z-index: -1;
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .about-avatar-wrap:hover .about-avatar-ring {
+            top: 14px;
+            left: 14px;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+            border-left: 3px solid var(--black);
+        }
+
+        .about-bio {
+            margin-bottom: 4rem;
+        }
+
+        .about-desc {
+            font-size: clamp(1rem, 1.5vw, 1.125rem);
+            line-height: 1.8;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-desc:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 3rem 0;
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 4rem;
+        }
+
+        .about-stat {
+            text-align: center;
+        }
+
+        .about-stat-num {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        /* Work / Portfolio */
+        .work-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .work-group {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .work-group:hover {
+            border-color: var(--gray-300);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .work-group.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .work-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+            user-select: none;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+        }
+
+        .work-group-header:hover {
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+        }
+
+        .work-group-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--black);
+            transition: width 0.6s var(--ease-out);
+        }
+
+        .work-group.visible .work-group-header::after {
+            width: 100%;
+        }
+
+        .work-group-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .work-group-company {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--black);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .work-group-role {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .work-group-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .work-group-period {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+        }
+
+        .work-group-toggle {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s var(--ease-out);
+            flex-shrink: 0;
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .work-group-header:hover .work-group-toggle {
+            border-color: var(--black);
+            background: var(--black);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .work-group-toggle-icon {
+            font-size: 1rem;
+            transition: transform 0.4s var(--ease-out);
+            line-height: 1;
+            font-weight: 600;
+        }
+
+        .work-group.collapsed .work-group-toggle-icon {
+            transform: rotate(-180deg);
+        }
+
+        .work-group-list {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: 3000px;
+            transition: max-height 0.6s var(--ease-out), opacity 0.4s var(--ease-out);
+            opacity: 1;
+            padding: 0 2.5rem 1.5rem;
+        }
+
+        .work-group.collapsed .work-group-list {
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            padding-bottom: 0;
+        }
+
+        .work-item {
+            display: grid;
+            grid-template-columns: 60px 1fr auto auto auto;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.75rem 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+            border-radius: 12px;
+            margin: 0.25rem 0;
+        }
+
+        .work-item:last-child {
+            border-bottom: none;
+        }
+
+        .work-item:hover {
+            background: var(--white);
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transform: translateX(4px);
+        }
+
+        .work-num {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--gray-400);
+        }
+
+        .work-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .work-item:hover .work-title {
+            color: var(--black);
+        }
+
+        .work-item:hover .work-title::after {
+            width: 100%;
+        }
+
+        .work-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--black);
+            transition: width 0.4s var(--ease-out);
+        }
+
+        .work-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .work-tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.75rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 100px;
+            color: var(--gray-500);
+            transition: all 0.3s;
+        }
+
+        .work-item:hover .work-tag {
+            border-color: var(--black);
+            color: var(--black);
+        }
+
+        .work-year {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .work-arrow {
+            font-size: 1.25rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .work-item:hover .work-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ============ Youlian Featured Styles ============ */
+        .work-group--featured {
+            border: 2px solid var(--black);
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+        }
+
+        .work-group--featured .work-group-header {
+            background: linear-gradient(135deg, var(--black) 0%, #1a1a1a 100%);
+        }
+
+        .work-group--featured .work-group-company {
+            color: var(--white);
+        }
+
+        .work-group--featured .work-group-role {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .work-group--featured .work-group-period {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .work-group--featured .work-group-toggle {
+            background: transparent;
+            border-color: rgba(255,255,255,0.3);
+            color: var(--white);
+        }
+
+        .work-group--featured .work-group-header:hover .work-group-toggle {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .work-group--featured .work-group-header::after {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 4px;
+        }
+
+        /* Category Filter */
+        .ul-category-filter {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding: 1.5rem 0 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .ul-cat-btn {
+            padding: 0.55rem 1.25rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 100px;
+            background: var(--white);
+            color: var(--gray-500);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ul-cat-btn:hover {
+            border-color: var(--black);
+            color: var(--black);
+            transform: translateY(-1px);
+        }
+
+        .ul-cat-btn.active {
+            background: var(--black);
+            border-color: var(--black);
+            color: var(--white);
+        }
+
+        /* Timeline */
+        .ul-timeline {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .ul-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.6rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gray-300) 0%, var(--gray-200) 100%);
+        }
+
+        .ul-timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+        }
+
+        .ul-timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .ul-timeline-item.hidden {
+            display: none;
+        }
+
+        .ul-timeline-dot {
+            position: absolute;
+            left: -2.25rem;
+            top: 1.25rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--black);
+            z-index: 1;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ul-timeline-item:hover .ul-timeline-dot {
+            transform: scale(1.3);
+            background: var(--black);
+            box-shadow: 0 0 0 6px rgba(10,10,10,0.1);
+        }
+
+        .ul-timeline-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ul-timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s var(--ease-out);
+        }
+
+        .ul-timeline-card:hover {
+            transform: translateX(6px) translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            border-color: var(--gray-300);
+        }
+
+        .ul-timeline-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .ul-timeline-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .ul-timeline-date {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            letter-spacing: 0.05em;
+        }
+
+        .ul-timeline-cat {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 100px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .ul-timeline-cat.game { background: #fff0f5; color: #e91e63; }
+        .ul-timeline-cat.screen { background: #e8f5e9; color: #2e7d32; }
+        .ul-timeline-cat.miniprogram { background: #e3f2fd; color: #1565c0; }
+        .ul-timeline-cat.website { background: #fff8e1; color: #f57f17; }
+
+        .ul-timeline-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--black);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+
+        .ul-timeline-desc {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .ul-timeline-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .ul-timeline-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            color: var(--gray-500);
+        }
+
+        /* Project Detail Modal */
+        .project-detail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        .project-detail.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-detail-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(20,20,20,0.98) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .project-detail-content {
+            position: relative;
+            height: 100%;
+            overflow-y: auto;
+            padding: 5rem 2.5rem;
+        }
+
+        .project-detail-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+            transition-delay: 0.1s;
+        }
+
+        .project-detail.open .project-detail-inner {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-detail-close {
+            position: fixed;
+            top: 1.5rem;
+            right: 2.5rem;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 201;
+        }
+
+        .project-detail-close:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .project-detail-meta {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .project-detail-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .project-detail-meta-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .project-detail-meta-value {
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .project-detail-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-detail-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .project-detail-tag {
+            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .project-detail-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .project-detail-section-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .project-detail-section p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .project-detail-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .project-detail-section li {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-detail-section li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .project-detail-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .project-detail-nav-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .project-detail-nav-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        /* Stacked Card Carousel (Style 3) */
+        .project-carousel {
+            position: relative;
+            height: 380px;
+            margin-bottom: 3rem;
+            perspective: 1200px;
+        }
+
+        .project-carousel-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 65%;
+            max-width: 520px;
+            height: 360px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            transform-origin: center center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-card img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .carousel-card-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: rgba(255,255,255,0.3);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .carousel-card[data-pos="0"] {
+            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+            z-index: 30;
+            opacity: 1;
+        }
+
+        .carousel-card[data-pos="1"] {
+            transform: translate(-18%, -50%) scale(0.82) rotateY(-12deg);
+            z-index: 20;
+            opacity: 0.7;
+        }
+
+        .carousel-card[data-pos="-1"] {
+            transform: translate(-82%, -50%) scale(0.82) rotateY(12deg);
+            z-index: 20;
+            opacity: 0.7;
+        }
+
+        .carousel-card[data-pos="2"] {
+            transform: translate(5%, -50%) scale(0.68) rotateY(-18deg);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .carousel-card[data-pos="-2"] {
+            transform: translate(-105%, -50%) scale(0.68) rotateY(18deg);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .carousel-card[data-pos="hidden"] {
+            transform: translate(-50%, -50%) scale(0.5);
+            z-index: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.4);
+            color: var(--white);
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-nav:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev { left: 2%; }
+        .carousel-nav.next { right: 2%; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 40;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: var(--white);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            background: var(--white);
+            color: var(--black);
+            padding: 5rem 2.5rem;
+        }
+
+        .skills-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skills-section .section-num {
+            color: var(--gray-400);
+        }
+
+        .skills-section .section-title {
+            color: var(--black);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .skill-item {
+            background: var(--white);
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s var(--ease-out);
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        .skill-item:hover {
+            background: var(--white);
+            border-color: var(--gray-300);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .skill-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .skill-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke-width: 1.5;
+        }
+
+        .skill-item:hover .skill-icon {
+            color: var(--black);
+            transform: scale(1.05);
+        }
+
+        .skill-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .skill-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skill-list li {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            transition: color 0.3s, padding 0.3s;
+        }
+
+        .skill-item:hover .skill-list li {
+            color: var(--black);
+        }
+
+        .skill-list li:hover {
+            padding-left: 0.5rem;
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--white);
+            color: var(--black);
+            padding: 5rem 2.5rem;
+        }
+
+        .contact-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-section .section-num {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .contact-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            margin-bottom: 3rem;
+            background: var(--gray-50);
+        }
+
+        .contact-status-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .contact-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 600;
+            color: var(--gray-500);
+            text-decoration: none;
+            margin-bottom: 3rem;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .contact-email:hover {
+            color: var(--black);
+        }
+
+        .contact-email::after {
+            content: '点击复制';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--gray-400);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-family: var(--font-mono);
+        }
+
+        .contact-email:hover::after {
+            opacity: 1;
+        }
+
+        .contact-email::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--black);
+            transition: width 0.4s var(--ease-out);
+        }
+
+        .contact-email:hover::before {
+            width: 100%;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            padding: 0.75rem 1.5rem;
+            background: var(--gray-50);
+            border-radius: 100px;
+            border: 1px solid var(--gray-100);
+        }
+
+        .contact-link:hover {
+            color: var(--black);
+            background: var(--white);
+            border-color: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--white);
+            color: var(--gray-400);
+            padding: 2rem 2.5rem;
+            border-top: 1px solid var(--gray-100);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .logo {
+                top: 1.5rem;
+                left: 1.5rem;
+            }
+
+            .menu-btn {
+                top: 1rem;
+                right: 1.5rem;
+            }
+
+            .nav-panel {
+                max-width: 100%;
+                padding: 5rem 2rem 2rem;
+            }
+
+            .section-title {
+                margin-bottom: 2.5rem;
+            }
+
+            .about-top {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .about-avatar-wrap {
+                position: relative;
+                top: 0;
+                max-width: 240px;
+                margin: 0 auto;
+            }
+
+            .about-quote {
+                padding-left: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .about-bio {
+                margin-bottom: 3rem;
+            }
+
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+
+            .work-groups {
+                gap: 1.5rem;
+            }
+
+            .work-group-header {
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+                padding: 1.5rem;
+            }
+
+            .work-group-list {
+                padding: 0 1rem 1rem;
+            }
+
+            .work-group-right {
+                gap: 1rem;
+            }
+
+            .work-group-period {
+                font-size: 0.75rem;
+            }
+
+            .work-group-company {
+                font-size: 1.15rem;
+            }
+
+            .work-group-role {
+                font-size: 0.85rem;
+            }
+
+            .work-group-toggle {
+                width: 36px;
+                height: 36px;
+            }
+
+            .work-item {
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto auto auto;
+                gap: 0.5rem;
+                padding: 1.25rem 0.75rem;
+            }
+
+            .work-num { display: none; }
+            .work-title { grid-column: 1 / -1; grid-row: 1; font-size: 1.15rem; }
+            .work-tags { grid-column: 1 / -1; grid-row: 2; }
+            .work-year { grid-column: 1; grid-row: 3; text-align: left; }
+            .work-arrow { grid-column: 2; grid-row: 3 / 5; align-self: center; opacity: 1; transform: none; }
+
+            /* Youlian Mobile Styles */
+            .ul-category-filter {
+                gap: 0.5rem;
+                padding: 1rem 0 1.5rem;
+                justify-content: center;
+            }
+
+            .ul-cat-btn {
+                padding: 0.45rem 0.9rem;
+                font-size: 0.78rem;
+            }
+
+            .ul-timeline {
+                padding-left: 1.75rem;
+                margin-top: 1.5rem;
+            }
+
+            .ul-timeline::before {
+                left: 0.4rem;
+            }
+
+            .ul-timeline-dot {
+                left: -1.65rem;
+                top: 1rem;
+                width: 14px;
+                height: 14px;
+                border-width: 2.5px;
+            }
+
+            .ul-timeline-card {
+                padding: 1.15rem 1.25rem;
+                border-radius: 12px;
+            }
+
+            .ul-timeline-card:hover {
+                transform: translateX(3px) translateY(-1px);
+            }
+
+            .ul-timeline-meta {
+                gap: 0.6rem;
+            }
+
+            .ul-timeline-title {
+                font-size: 1.05rem;
+            }
+
+            .ul-timeline-desc {
+                font-size: 0.82rem;
+                -webkit-line-clamp: 3;
+            }
+
+            .ul-timeline-tags {
+                gap: 0.3rem;
+            }
+
+            .ul-timeline-tag {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            /* Carousel Mobile */
+            .project-carousel {
+                height: 300px;
+            }
+
+            .carousel-card {
+                width: 82%;
+                height: 260px;
+            }
+
+            .carousel-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .project-detail-content {
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .project-detail-close {
+                right: 1.5rem;
+            }
+
+            .project-detail-meta {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .skills-section,
+            .contact-section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .skill-item {
+                padding: 1.75rem;
+            }
+
+            .hero-content {
+                text-align: center;
+                padding: 0 1.5rem;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 2rem;
+                max-width: 100%;
+            }
+
+            .hero-cta {
+                float: none;
+                margin-top: 0;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: center;
+            }
+
+            .hero-scroll {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.25rem;
+            }
+
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Youlian 480px Styles */
+            .ul-category-filter {
+                gap: 0.35rem;
+                padding: 0.75rem 0 1.25rem;
+            }
+
+            .ul-cat-btn {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.72rem;
+            }
+
+            .ul-timeline {
+                padding-left: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .ul-timeline::before {
+                left: 0.3rem;
+            }
+
+            .ul-timeline-dot {
+                left: -1.4rem;
+                width: 12px;
+                height: 12px;
+            }
+
+            .ul-timeline-card {
+                padding: 1rem;
+            }
+
+            .ul-timeline-title {
+                font-size: 0.95rem;
+            }
+
+            .ul-timeline-desc {
+                font-size: 0.78rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .ul-timeline-tag {
+                font-size: 0.6rem;
+                padding: 0.15rem 0.4rem;
+            }
+
+            /* Carousel 480px */
+            .project-carousel {
+                height: 260px;
+            }
+
+            .carousel-card {
+                width: 85%;
+                height: 220px;
+            }
+
+            .carousel-nav {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+
+            .project-detail-content {
+                padding: 3.5rem 1rem 1.5rem;
+            }
+
+            .project-detail-close {
+                right: 1rem;
+                top: 0.75rem;
+            }
+
+            .project-detail-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mouse trail canvas -->
+    <canvas id="mouse-trail"></canvas>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-percent" id="preloader-percent">0%</div>
+        <div class="preloader-label">LOADING</div>
+        <div class="preloader-bar" id="preloader-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <a href="#home" class="logo" id="logo">朱戬 / ZHUJIAN</a>
+    <button class="menu-btn" id="menu-btn" aria-label="菜单">
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav class="nav-panel" id="nav-panel">
+        <ul class="nav-links">
+            <li><a href="#about" data-num="01" onclick="closeNav()">关于我</a></li>
+            <li><a href="#works" data-num="02" onclick="closeNav()">作品集</a></li>
+            <li><a href="#skills" data-num="03" onclick="closeNav()">技能专长</a></li>
+            <li><a href="#contact" data-num="04" onclick="closeNav()">联系方式</a></li>
+        </ul>
+        <div class="nav-social-links">
+            <a href="mailto:1055204250@qq.com">✉️ 1055204250@qq.com</a>
+            <a href="tel:17607181526">📱 176 0718 1526</a>
+            <a href="https://github.com/1055204250" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home">
+        <canvas id="three-canvas"></canvas>
+        <div class="hero-content">
+            <div class="hero-tag">产品经理 / 测试工程师</div>
+            <h1 class="hero-title">
+                <span class="hero-title-line"><span>技术出身的</span></span>
+                <span class="hero-title-line"><span class="accent">产品思考者</span></span>
+                <span class="hero-title-line"><span>与品质守护者</span></span>
+            </h1>
+            <p class="hero-subtitle">
+                9 年互联网经验，从 iOS 开发到测试工程再到产品助理，
+                专注于用技术思维驱动产品体验升级。
+            </p>
+            <a href="#works" class="hero-cta">
+                <span>查看近期作品</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+        <div class="hero-scroll">
+            <span class="hero-scroll-text">SCROLL</span>
+            <div class="hero-scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="section-num">01 — 关于我</div>
+        <h2 class="section-title" id="about-title">
+            <span class="line">技术出身的</span>
+            <span class="line">产品思考者。</span>
+        </h2>
+        <div class="about-content">
+            <div class="about-top">
+                <div class="about-avatar-wrap">
+                    <div class="about-avatar">
+                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUEBAQEAwUEBAQGBQUGCA0ICAcHCBALDAkNExAUExIQEhIUFx0ZFBYcFhISGiMaHB4fISEhFBkkJyQgJh0gISD/2wBDAQUGBggHCA8ICA8gFRIVICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICD/wAARCAG5AWYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7DooooNQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAo60dahurmKzgkubmWOCCFN8krnAUDuaBE1FeMa3+038J9GuZLdNVudSlTqLS24/NttcLrf7X/AIah8yLQdFurn5E2TTyKm0/7v/16OUhzsfUNFfHE37YGsJEY7Pw3ayN/DNcS7v0XbV6y/bIkjtCt/wCBY7m5PVre+MSfkUajlDnPrmivl6w/a7065nSO98GS2qb/AJmT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" alt="朱戬的个人照片">
+                    </div>
+                    <div class="about-avatar-ring"></div>
+                </div>
+                <div class="about-intro">
+                    <p class="about-quote">
+                        极简不是空无一物，而是去芜存菁。
+                    </p>
+                    <div class="about-bio">
+                        <p class="about-desc">
+                            我是朱戬，一名拥有扎实技术背景的产品从业者。从 iOS 软件开发起步，
+                            经历测试工程师的打磨，再到产品助理的沉淀——每一次角色转变，
+                            都让我对"好产品"的理解更深一层。
+                        </p>
+                        <p class="about-desc">
+                            在人脸识别、智能硬件、宠物穿戴设备等领域，我亲历了从 0 到 1 的产品全过程。
+                            我相信，真正的产品能力，是能够在技术可行性与用户需求之间找到最佳平衡点。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-stats">
+                <div class="about-stat">
+                    <div class="about-stat-num">9+</div>
+                    <div class="about-stat-label">年从业经验</div>
+                </div>
+                <div class="about-stat">
+                    <div class="about-stat-num">13</div>
+                    <div class="about-stat-label">参与项目</div>
+                </div>
+                <div class="about-stat">
+                    <div class="about-stat-num">3</div>
+                    <div class="about-stat-label">款上架 App</div>
+                </div>
+                <div class="about-stat">
+                    <div class="about-stat-num">4</div>
+                    <div class="about-stat-label">家任职公司</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Works Section -->
+    <section class="section" id="works">
+        <div class="section-num">02 — 作品集</div>
+        <h2 class="section-title" id="works-title">
+            <span class="line">精选项目</span>
+            <span class="line">与作品。</span>
+        </h2>
+        <div class="work-groups">
+            <!-- Group 1: 武汉优联前端科技有限公司 (重点展示) -->
+            <div class="work-group work-group--featured" data-group="0">
+                <div class="work-group-header" onclick="toggleGroup(this)">
+                    <div class="work-group-left">
+                        <div class="work-group-company">武汉优联前端科技有限公司</div>
+                        <div class="work-group-role">产品助理 · 50-150人 · 民营公司</div>
+                    </div>
+                    <div class="work-group-right">
+                        <div class="work-group-period">2023.04 — 2026.07</div>
+                        <div class="work-group-toggle">
+                            <span class="work-group-toggle-icon">↑</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-group-list">
+                    <!-- Category Filter -->
+                    <div class="ul-category-filter" id="ul-category-filter">
+                        <button class="ul-cat-btn active" data-cat="game">🎮 游戏/H5</button>
+                        <button class="ul-cat-btn" data-cat="screen">📺 智慧大屏</button>
+                        <button class="ul-cat-btn" data-cat="miniprogram">📱 小程序</button>
+                        <button class="ul-cat-btn" data-cat="website">🌐 官网定制</button>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="ul-timeline" id="ul-timeline">
+                        <!-- Timeline items will be rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2 -->
+            <div class="work-group" data-group="1">
+                <div class="work-group-header" onclick="toggleGroup(this)">
+                    <div class="work-group-left">
+                        <div class="work-group-company">深圳中维神目科技有限公司湖北分公司</div>
+                        <div class="work-group-role">测试工程师 · 500人 · 民营公司</div>
+                    </div>
+                    <div class="work-group-right">
+                        <div class="work-group-period">2021.12 — 2023.01</div>
+                        <div class="work-group-toggle">
+                            <span class="work-group-toggle-icon">↑</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-group-list">
+                    <div class="work-item" onclick="openProject(1)">
+                        <span class="work-num">01</span>
+                        <span class="work-title">TShow 商显广告平台 / 广告 APK</span>
+                        <div class="work-tags">
+                            <span class="work-tag">商显广告</span>
+                            <span class="work-tag">Android</span>
+                            <span class="work-tag">TCL 外包</span>
+                        </div>
+                        <div><span class="work-year">2021.12 — 2023.01</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(2)">
+                        <span class="work-num">02</span>
+                        <span class="work-title">AIcraft 人工智能开发平台</span>
+                        <div class="work-tags">
+                            <span class="work-tag">AI 平台</span>
+                            <span class="work-tag">模型训练</span>
+                            <span class="work-tag">可视化</span>
+                        </div>
+                        <div><span class="work-year">2021.12 — 2023.01</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3 -->
+            <div class="work-group" data-group="2">
+                <div class="work-group-header" onclick="toggleGroup(this)">
+                    <div class="work-group-left">
+                        <div class="work-group-company">武汉幻视智能科技有限公司</div>
+                        <div class="work-group-role">测试工程师 · 50-150人 · 民营公司</div>
+                    </div>
+                    <div class="work-group-right">
+                        <div class="work-group-period">2017.05 — 2021.11</div>
+                        <div class="work-group-toggle">
+                            <span class="work-group-toggle-icon">↑</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-group-list">
+                    <div class="work-item" onclick="openProject(3)">
+                        <span class="work-num">01</span>
+                        <span class="work-title">DeepCloud 中控平台 / 小神 App</span>
+                        <div class="work-tags">
+                            <span class="work-tag">中控平台</span>
+                            <span class="work-tag">人脸识别</span>
+                            <span class="work-tag">iOS App</span>
+                        </div>
+                        <div><span class="work-year">2019.02 — 2021.11</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(4)">
+                        <span class="work-num">02</span>
+                        <span class="work-title">中移智慧营业厅平台</span>
+                        <div class="work-tags">
+                            <span class="work-tag">新零售</span>
+                            <span class="work-tag">郑州移动</span>
+                            <span class="work-tag">外包项目</span>
+                        </div>
+                        <div><span class="work-year">2019.02 — 2021.11</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(5)">
+                        <span class="work-num">03</span>
+                        <span class="work-title">测温人脸识别门禁</span>
+                        <div class="work-tags">
+                            <span class="work-tag">门禁设备</span>
+                            <span class="work-tag">测温</span>
+                            <span class="work-tag">疫情防控</span>
+                        </div>
+                        <div><span class="work-year">2020 — 2021</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(6)">
+                        <span class="work-num">04</span>
+                        <span class="work-title">AIshop 爱买新零售平台</span>
+                        <div class="work-tags">
+                            <span class="work-tag">新零售</span>
+                            <span class="work-tag">客流统计</span>
+                            <span class="work-tag">人脸识别</span>
+                        </div>
+                        <div><span class="work-year">2018.07 — 2019.01</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(7)">
+                        <span class="work-num">05</span>
+                        <span class="work-title">人脸抓拍机 / 比对机 / NVR 系列</span>
+                        <div class="work-tags">
+                            <span class="work-tag">安防硬件</span>
+                            <span class="work-tag">算法测试</span>
+                            <span class="work-tag">海思芯片</span>
+                        </div>
+                        <div><span class="work-year">2018.07 — 2019.01</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(8)">
+                        <span class="work-num">06</span>
+                        <span class="work-title">签颜 / 阅片系统</span>
+                        <div class="work-tags">
+                            <span class="work-tag">签到系统</span>
+                            <span class="work-tag">视频检索</span>
+                            <span class="work-tag">FTP</span>
+                        </div>
+                        <div><span class="work-year">2017.07 — 2018.06</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(9)">
+                        <span class="work-num">07</span>
+                        <span class="work-title">侦颜 — 犯罪人轨迹追踪系统</span>
+                        <div class="work-tags">
+                            <span class="work-tag">公安安防</span>
+                            <span class="work-tag">私有化部署</span>
+                            <span class="work-tag">轨迹分析</span>
+                        </div>
+                        <div><span class="work-year">2017.05 — 2017.07</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4 -->
+            <div class="work-group" data-group="3">
+                <div class="work-group-header" onclick="toggleGroup(this)">
+                    <div class="work-group-left">
+                        <div class="work-group-company">联思普瑞（武汉）电子科技有限公司</div>
+                        <div class="work-group-role">iOS 软件工程师 · 50-150人 · 民营公司</div>
+                    </div>
+                    <div class="work-group-right">
+                        <div class="work-group-period">2015.12 — 2017.05</div>
+                        <div class="work-group-toggle">
+                            <span class="work-group-toggle-icon">↑</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-group-list">
+                    <div class="work-item" onclick="openProject(10)">
+                        <span class="work-num">01</span>
+                        <span class="work-title">PetKollar 宠物智能穿戴 App</span>
+                        <div class="work-tags">
+                            <span class="work-tag">iOS</span>
+                            <span class="work-tag">智能硬件</span>
+                            <span class="work-tag">美国上线</span>
+                        </div>
+                        <div><span class="work-year">2016 — 2017</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(11)">
+                        <span class="work-num">02</span>
+                        <span class="work-title">神目 App — P2P 摄像头管理</span>
+                        <div class="work-tags">
+                            <span class="work-tag">iOS 开发</span>
+                            <span class="work-tag">视频监控</span>
+                            <span class="work-tag">P2P</span>
+                        </div>
+                        <div><span class="work-year">2015 — 2017</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                    <div class="work-item" onclick="openProject(12)">
+                        <span class="work-num">03</span>
+                        <span class="work-title">Blue Switch 智能开关 App</span>
+                        <div class="work-tags">
+                            <span class="work-tag">iOS 开发</span>
+                            <span class="work-tag">智能家居</span>
+                            <span class="work-tag">创客</span>
+                        </div>
+                        <div><span class="work-year">2016</span></div>
+                        <span class="work-arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Detail Modal -->
+    <div class="project-detail" id="project-detail">
+        <div class="project-detail-bg"></div>
+        <button class="project-detail-close" onclick="closeProject()">✕</button>
+        <div class="project-detail-content">
+            <div class="project-detail-inner" id="project-detail-inner"></div>
+        </div>
+    </div>
+
+    <!-- Skills Section -->
+    <section class="skills-section" id="skills">
+        <div class="skills-inner">
+            <div class="section-num">03 — 技能专长</div>
+            <h2 class="section-title" id="skills-title">
+                <span class="line">核心技能</span>
+                <span class="line">与能力栈。</span>
+            </h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2"/>
+                            <path d="M9 6h6"/>
+                            <path d="M9 10h6"/>
+                            <path d="M9 14h4"/>
+                            <path d="M15 14l1.5 1.5L20 13"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">产品能力</div>
+                    <ul class="skill-list">
+                        <li>需求分析与产品规划</li>
+                        <li>竞品分析与市场调研</li>
+                        <li>原型设计与 PRD 撰写</li>
+                        <li>用户体验设计思维</li>
+                        <li>数据驱动决策能力</li>
+                        <li>跨部门沟通协调</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="7"/>
+                            <line x1="20" y1="20" x2="16.65" y2="16.65"/>
+                            <path d="M8 11l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">测试技术</div>
+                    <ul class="skill-list">
+                        <li>功能测试与系统测试</li>
+                        <li>接口协议测试</li>
+                        <li>自动化测试基础</li>
+                        <li>性能测试与压力测试</li>
+                        <li>测试用例设计与评审</li>
+                        <li>缺陷管理与跟踪</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="3" width="15" height="14"/>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                            <line x1="5" y1="18" x2="19" y2="18"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">开发技术</div>
+                    <ul class="skill-list">
+                        <li>iOS / Swift 开发</li>
+                        <li>Python 脚本编写</li>
+                        <li>HTML / CSS 基础</li>
+                        <li>SQL 数据库查询</li>
+                        <li>Git 版本控制</li>
+                        <li>ROC 曲线绘制与分析</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="6" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="18" r="3"/>
+                            <line x1="8.5" y1="10.5" x2="15.5" y2="7.5"/>
+                            <line x1="8.5" y1="13.5" x2="15.5" y2="16.5"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">AI 与算法</div>
+                    <ul class="skill-list">
+                        <li>人脸识别算法测试</li>
+                        <li>模型训练与评估</li>
+                        <li>数据集管理与标注</li>
+                        <li>算法性能对比分析</li>
+                        <li>测温算法验证</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18"/>
+                            <path d="M5 21V7l7-4 7 4v14"/>
+                            <path d="M9 21v-6h6v6"/>
+                            <path d="M10 9h4"/>
+                            <path d="M10 13h4"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">行业领域</div>
+                    <ul class="skill-list">
+                        <li>智能安防与监控</li>
+                        <li>智能硬件 / IoT</li>
+                        <li>新零售 / 商显广告</li>
+                        <li>宠物穿戴设备</li>
+                        <li>公安安防系统</li>
+                    </ul>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8"/>
+                            <rect x="1" y="16" width="22" height="6" rx="2"/>
+                            <path d="M12 12v4"/>
+                            <path d="M8 12v4"/>
+                            <path d="M16 12v4"/>
+                        </svg>
+                    </div>
+                    <div class="skill-title">工具与方法</div>
+                    <ul class="skill-list">
+                        <li>Jira / Tapd 项目管理</li>
+                        <li>禅道缺陷管理</li>
+                        <li>Postman 接口测试</li>
+                        <li>Fiddler / Charles 抓包</li>
+                        <li>Axure / 墨刀原型</li>
+                        <li>Figma 设计协作</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="contact-inner">
+            <div class="section-num">04 — 联系方式</div>
+            <div class="contact-status">
+                <span class="contact-status-dot"></span>
+                <span>可合作 · 随时到岗</span>
+            </div>
+            <h2 class="contact-title">
+                有合适的机会？<br>欢迎随时联系我
+            </h2>
+            <div class="contact-email" onclick="copyEmail()">1055204250@qq.com</div>
+            <div class="contact-links">
+                <a href="tel:17607181526" class="contact-link">📱 176 0718 1526</a>
+                <a href="https://github.com/1055204250" target="_blank" rel="noopener noreferrer" class="contact-link">🐙 GitHub</a>
+                <a href="#" class="contact-link">📍 湖北武汉</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 朱戬. 用代码与思考构建更好的产品。</p>
+    </footer>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+    // ============================================
+    // PRELOADER
+    // ============================================
+    (function initPreloader() {
+        const preloader = document.getElementById('preloader');
+        const percentEl = document.getElementById('preloader-percent');
+        const barEl = document.getElementById('preloader-bar');
+        
+        let progress = 0;
+        const duration = 1500;
+        const startTime = Date.now();
+        
+        function updateProgress() {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min((elapsed / duration) * 100, 100);
+            
+            percentEl.textContent = Math.floor(progress) + '%';
+            barEl.style.setProperty('--progress', progress + '%');
+            barEl.querySelector('::after') ? null : null;
+            barEl.style.width = '200px';
+            barEl.style.position = 'relative';
+            barEl.style.overflow = 'hidden';
+            
+            // Update bar fill
+            const barAfter = barEl;
+            
+            if (progress < 100) {
+                requestAnimationFrame(updateProgress);
+            } else {
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    initHeroAnimations();
+                    initScrollAnimations();
+                    initGroups();
+                }, 300);
+            }
+        }
+        
+        // Set bar fill using pseudo-element simulation
+        const barFill = document.createElement('div');
+        barFill.style.cssText = 'position:absolute;top:0;left:0;height:100%;width:0%;background:var(--white);transition:width 0.1s linear;';
+        barEl.appendChild(barFill);
+        
+        function updateBar() {
+            barFill.style.width = progress + '%';
+            if (progress < 100) {
+                requestAnimationFrame(updateBar);
+            }
+        }
+        
+        document.body.style.overflow = 'hidden';
+        updateProgress();
+        updateBar();
+    })();
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
+    const menuBtn = document.getElementById('menu-btn');
+    const navPanel = document.getElementById('nav-panel');
+    const logo = document.getElementById('logo');
+    let navOpen = false;
+
+    function toggleNav() {
+        navOpen = !navOpen;
+        if (navOpen) {
+            navPanel.classList.add('open');
+            menuBtn.classList.add('active');
+            logo.classList.add('dark');
+            document.body.style.overflow = 'hidden';
+        } else {
+            navPanel.classList.remove('open');
+            menuBtn.classList.remove('active');
+            logo.classList.remove('dark');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function closeNav() {
+        if (navOpen) toggleNav();
+    }
+
+    menuBtn.addEventListener('click', toggleNav);
+
+    // Close nav on escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navOpen) closeNav();
+    });
+
+    // ============================================
+    // THREE.JS HERO BACKGROUND
+    // ============================================
+    (function initThree() {
+        const canvas = document.getElementById('three-canvas');
+        if (!canvas || typeof THREE === 'undefined') return;
+
+        try {
+            const testCanvas = document.createElement('canvas');
+            const gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+            if (!gl) {
+                canvas.style.display = 'none';
+                return;
+            }
+        } catch (e) {
+            canvas.style.display = 'none';
+            return;
+        }
+
+        let scene, camera, renderer;
+        try {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                antialias: true,
+                alpha: true 
+            });
+        } catch (e) {
+            canvas.style.display = 'none';
+            return;
+        }
+
+        // Lighting for solid materials
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0xe8e6e3, 0.25);
+        fillLight.position.set(-5, 0, -5);
+        scene.add(fillLight);
+        
+        const dpr = Math.min(window.devicePixelRatio, 2);
+        renderer.setPixelRatio(dpr);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0xfafafa, 0);
+
+        const shapes = [];
+        const geometries = [
+            new THREE.IcosahedronGeometry(1, 0),
+            new THREE.OctahedronGeometry(1, 0),
+            new THREE.TorusGeometry(0.7, 0.25, 8, 24),
+            new THREE.BoxGeometry(1, 1, 1),
+            new THREE.TetrahedronGeometry(1, 0),
+            new THREE.DodecahedronGeometry(1, 0)
+        ];
+
+        for (let i = 0; i < 12; i++) {
+            const geometry = geometries[i % geometries.length];
+            const material = new THREE.MeshPhysicalMaterial({
+                color: 0xc5c2bd,
+                roughness: 0.55,
+                metalness: 0.15,
+                clearcoat: 0.2,
+                clearcoatRoughness: 0.5,
+                transparent: true,
+                opacity: 0.9
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            mesh.position.set(
+                (Math.random() - 0.5) * 12,
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 6 - 2
+            );
+            mesh.rotation.set(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI,
+                Math.random() * Math.PI
+            );
+            const scale = 0.5 + Math.random() * 1.5;
+            mesh.scale.set(scale, scale, scale);
+            
+            mesh.userData = {
+                rotSpeed: {
+                    x: (Math.random() - 0.5) * 0.003,
+                    y: (Math.random() - 0.5) * 0.005,
+                    z: (Math.random() - 0.5) * 0.002
+                },
+                floatSpeed: 0.3 + Math.random() * 0.5,
+                floatOffset: Math.random() * Math.PI * 2,
+                originalX: mesh.position.x,
+                originalY: mesh.position.y,
+                originalZ: mesh.position.z,
+                parallaxX: (Math.random() - 0.5) * 1.2,
+                parallaxY: (Math.random() - 0.5) * 0.8
+            };
+            
+            scene.add(mesh);
+            shapes.push(mesh);
+        }
+
+        camera.position.z = 6;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+                mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+            }
+        }, { passive: true });
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            targetX += (mouseX - targetX) * 0.03;
+            targetY += (mouseY - targetY) * 0.03;
+
+            shapes.forEach((mesh, i) => {
+                mesh.rotation.x += mesh.userData.rotSpeed.x;
+                mesh.rotation.y += mesh.userData.rotSpeed.y;
+                mesh.rotation.z += mesh.userData.rotSpeed.z;
+                
+                mesh.position.y = mesh.userData.originalY + 
+                    Math.sin(time * mesh.userData.floatSpeed + mesh.userData.floatOffset) * 0.3;
+                
+                // Parallax based on mouse (offset from original position, not cumulative)
+                mesh.position.x = mesh.userData.originalX + targetX * mesh.userData.parallaxX;
+                mesh.position.y += targetY * mesh.userData.parallaxY;
+                mesh.position.z = mesh.userData.originalZ + targetX * mesh.userData.parallaxX * 0.5;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    })();
+
+    // ============================================
+    // HERO ANIMATIONS (after preloader)
+    // ============================================
+    function initHeroAnimations() {
+        const lines = document.querySelectorAll('.hero-title-line');
+        lines.forEach((line, i) => {
+            setTimeout(() => {
+                line.style.transform = 'translateY(0)';
+                line.classList.add('visible');
+            }, 100 + i * 150);
+        });
+    }
+
+    // ============================================
+    // SCROLL ANIMATIONS
+    // ============================================
+    function initScrollAnimations() {
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+        
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Section titles
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.fromTo(title.querySelectorAll('.line'),
+                { y: '100%' },
+                {
+                    y: '0%',
+                    duration: 0.8,
+                    stagger: 0.15,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: title,
+                        start: 'top 80%'
+                    }
+                }
+            );
+        });
+
+        // About section — avatar
+        gsap.fromTo('.about-avatar-wrap',
+            { opacity: 0, x: -40 },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.about-top',
+                    start: 'top 75%'
+                }
+            }
+        );
+
+        // About section — quote
+        gsap.fromTo('.about-quote',
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.about-intro',
+                    start: 'top 75%'
+                }
+            }
+        );
+
+        // About section — bio
+        gsap.fromTo('.about-bio > *',
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.about-bio',
+                    start: 'top 75%'
+                }
+            }
+        );
+
+        // About stats
+        gsap.fromTo('.about-stat',
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.about-stats',
+                    start: 'top 80%'
+                }
+            }
+        );
+
+        // Work groups
+        gsap.utils.toArray('.work-group').forEach((group, i) => {
+            gsap.fromTo(group,
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: group,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse',
+                        onEnter: () => group.classList.add('visible')
+                    }
+                }
+            );
+
+            const items = group.querySelectorAll('.work-item');
+            gsap.fromTo(items,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    stagger: 0.08,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: group,
+                        start: 'top 75%',
+                        toggleActions: 'play none none reverse'
+                    }
+                }
+            );
+        });
+
+        // Skills
+        gsap.fromTo('.skill-item',
+            { opacity: 0, y: 40 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.skills-grid',
+                    start: function() {
+                        return window.innerWidth < 768 ? 'top 95%' : 'top 90%';
+                    },
+                    once: true
+                }
+            }
+        );
+
+        // Contact
+        gsap.fromTo('.contact-inner > *',
+            { opacity: 0, y: 40 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.contact-inner',
+                    start: function() {
+                        return window.innerWidth < 768 ? 'top 95%' : 'top 70%';
+                    },
+                    once: true
+                }
+            }
+        );
+
+        ScrollTrigger.refresh();
+    }
+
+    // ============================================
+    // MOBILE FALLBACK: ensure all GSAP-hidden content is visible
+    // ============================================
+    setTimeout(() => {
+        if (window.innerWidth < 1024) {
+            document.querySelectorAll('.skill-item, .work-group, .about-avatar-wrap, .about-quote, .about-bio > *, .about-stat, .contact-inner > *').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+    }, 500);
+
+    // Safety net: force visible when in viewport on mobile
+    if (window.innerWidth < 1024 && 'IntersectionObserver' in window) {
+        const mobileObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'none';
+                }
+            });
+        }, { threshold: 0.05 });
+
+        document.querySelectorAll('.skill-item, .work-group, .about-stat, .contact-inner > *').forEach(el => {
+            mobileObserver.observe(el);
+        });
+    }
+
+    // ============================================
+    // YOULIAN FEATURED PROJECTS
+    // ============================================
+    const youlianProjects = [
+        {
+            id: 'y22',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2026.04 — 2026.07',
+            title: '智卜卜H5&小程序',
+            desc: '面向普通用户的塔罗解读类应用，支持微信小程序与H5网页双端运行，AI塔罗会话加会员体系。',
+            tags: ['AI塔罗', '会员付费', '双端运行'],
+            link: 'https://www.zhibbu.cn/',
+            images: ['assets/project-images/optimized/image85_seg1.jpg', 'assets/project-images/optimized/image85_seg2.jpg', 'assets/project-images/optimized/image85_seg3.jpg', 'assets/project-images/optimized/image85_seg4.jpg', 'assets/project-images/optimized/image85_seg5.jpg'],
+            overview: '智卜卜是一款面向普通用户的塔罗解读类应用，支持微信小程序与H5网页双端运行。以塔罗牌阵为核心，提供免费解读、会员专属权益、星火激励体系、分享邀请裂变等功能。包含维纳斯感情洞察、贤者石财富指引、凯旋事业判断、秘星学业启示等牌阵，支持全类型牌阵的洗牌、抽牌、摆牌、翻牌、解牌及追问，为用户提供专业的塔罗占卜服务。',
+            highlights: ['前期项目调研与需求分析', '需求文档制作与设计稿确认', '开发计划制定', '项目跟进', '全流程系统测试', '软著申请']
+        },
+        {
+            id: 'y29',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2026.01 — 2026.03',
+            title: 'Paxgon官网定制',
+            desc: '与马来西亚多元化顶级创意机构Paxgon签署合作，品牌形象数字化升级，前端技术与创意营销深度融合。',
+            tags: ['国际合作', '品牌升级', '创意营销'],
+            link: 'https://www.paxgon.com/',
+            images: ['assets/project-images/optimized/image83.jpg', 'assets/project-images/optimized/image84.jpg'],
+            overview: '武汉优联前端与马来西亚多元化顶级创意机构Paxgon签署合作协议，正式承担Paxgon官网升级项目的设计与开发。Paxgon是一家专注于商业活动策划、数字创意服务和可持续活动设计的创意机构，品牌建设不再是单一的视觉呈现，而是注重沉浸式体验与高效交互的综合体。官网采用现代简约的设计语言，展示了Paxgon的服务理念、优秀案例和合作伙伴，打造国际化的品牌形象。',
+            highlights: ['与设计对接确认设计稿', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y17',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2025.09 — 2025.10',
+            title: '湖北省旅游指挥中心',
+            desc: '集景区热度排行、历史客流、客源分布、游客画像、客流趋势预测的综合性展示平台。',
+            tags: ['文旅大数据', '地图下钻', '客流预测'],
+            link: 'https://case.ufrontend.com/uf/bigscreen/hubei_tour_screen/',
+            images: ['assets/project-images/optimized/image80.jpg', 'assets/project-images/optimized/image81.jpg', 'assets/project-images/optimized/image82.jpg'],
+            overview: '湖北文旅指挥中心大屏是一个集景区热度排行、历史客流、客源分布、获客排行、游客画像、客流趋势预测的综合性展示平台。通过直观、动态、智能的设计理念，结合地图分层下钻、丰富的图表样式与设计动效，为用户呈现清晰、直观、易理解的客流分布情况，为湖北省文旅产业的运营决策提供数据支撑。',
+            highlights: ['前期调研与资料收集', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y21',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2025.07 — 2025.08',
+            title: '英维克产品选型小程序',
+            desc: '将重型工业运维抽象为一键选型的数字化选型平台，海量设备与上千SKU场景。',
+            tags: ['工业温控', '数字化选型', '参数对比'],
+            link: '',
+            images: ['assets/project-images/optimized/image79.jpg'],
+            overview: '英维克产品选型工具小程序，在海量设备与上千SKU的工业温控场景中，将重型工业运维抽象为一键选型，打造数字化选型平台。小程序通过结构化参数筛选与对比，支持按应用场景、制冷量、规格型号等多维度快速筛选，帮助客户与一线销售在数秒内锁定最匹配的产品，大幅提升选型效率和准确性。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '与设计对接确认设计稿', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y28',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2025.05 — 2025.06',
+            title: '优联官网升级',
+            desc: '优联前端官网通过结合前端研发解决方案与设计动效，运用文字交错与黑色视效等创意元素。',
+            tags: ['品牌官网', '动效设计', '黑色视效'],
+            link: 'https://ufrontend.com/',
+            images: ['assets/project-images/optimized/image77.jpg', 'assets/project-images/optimized/image78.jpg'],
+            overview: '优联前端官网，通过结合前端研发解决方案与设计动效，运用文字交错与黑色视效等创意元素，为用户带来了独特而深刻的浏览体验。官网展示了优联前端的服务领域（创意网站、小程序/APP设计、数字智慧大屏、各类软件定制），以及合作伙伴和成功案例，充分展示了优联前端在前端研发领域的专业实力和创新能力。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '与设计对接确认设计稿', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y16',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2025.04',
+            title: '乐业天门大屏',
+            desc: '天门就业服务驿站求职大屏与人力资源市场大数据平台，涵盖求职概括、岗位需求统计等功能。',
+            tags: ['就业服务', '人力资源', '大数据大屏'],
+            link: '',
+            images: [],
+            overview: '天门就业服务驿站求职大屏是集求职概括、岗位概括、用工信息、需求概括、求职者信息等功能于一体的综合性展示平台。天门市人力资源市场大数据平台是集岗位需求统计、热招岗位排行、求职者学历划分、专业分布、薪资水平等功能于一体的综合性展示平台，为就业服务提供数据驱动的决策支持。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y07',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2025.03 — 2025.04',
+            title: '康之泉水乐园互动H5',
+            desc: '夏日畅游季水上嘉年华，将互动体验与水上乐园结合，带来无限乐趣的水上游乐园之旅。',
+            tags: ['品牌合作', 'H5游戏', '娱乐营销'],
+            link: 'https://case.ufrontend.com/miniprogram/officialaccounts/kangzhiquan/index.html',
+            images: ['assets/project-images/optimized/image75.jpg', 'assets/project-images/optimized/image76.jpg'],
+            overview: '夏日畅游季水上嘉年华微信小游戏，康之泉水乐园互动H5，优联前端团队通过精心的设计与创意的实施，将互动体验与水上乐园结合。用户可在游戏中体验各种水上游乐项目，为品牌带来趣味化的营销推广效果。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y27',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2025.03',
+            title: '星福医疗官网定制',
+            desc: '医疗行业高端网站建设，加入DNA、细胞粒子等效果，极大增强现代感、科技感与医疗关联性。',
+            tags: ['粒子特效', '创意网站', '医疗科技'],
+            link: 'https://case.ufrontend.com/uf/medical',
+            images: ['assets/project-images/optimized/image73.jpg', 'assets/project-images/optimized/image74.jpg'],
+            overview: '星福医疗官网，医疗行业高端网站建设。在医疗行业高端网站建设中，加入DNA、细胞粒子等效果可以极大增强网站的现代感、科技感以及与医疗领域的关联性。网站包含关于星福、产品中心（肿瘤靶向伴随诊断、药物基因组学基因检测、CTC检测）、星福优势、荣誉资质等板块，通过创新的视觉设计和动效，有效提升网站的视觉吸引力，同时突出其专业性和前沿性。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y26',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2025.01 — 2025.02',
+            title: '橙石官网定制',
+            desc: '北京中景橙石科技股份有限公司企业官网，现代化设计语言全面升级用户体验。',
+            tags: ['企业官网', '响应式', '品牌升级'],
+            link: '',
+            images: ['assets/project-images/optimized/image71.jpg', 'assets/project-images/optimized/image72.jpg'],
+            overview: '优联前端为北京中景橙石科技股份有限公司设计开发的企业官网，旨在通过现代化的设计语言和技术实现，全面升级用户体验，充分展示公司的专业能力和服务优势。网站采用响应式设计，融入流畅的动效和交互，打造专业、现代、可信赖的企业品牌形象。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y24',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2024.12',
+            title: '深规院定制官网',
+            desc: '以粒子动画的形式展示深规院数字城市设计研究中心的业务板块，强化品牌印象与技术实力。',
+            tags: ['粒子动画', '品牌展示', '技术实力'],
+            link: 'https://case.ufrontend.com/uf/urban',
+            images: ['assets/project-images/optimized/image65.jpg'],
+            overview: '深规院数字城市设计研究中心官网，以粒子动画的形式展示业务板块。粒子效果随着用户滚动和交互动态变化，不仅能够有效地传达各个业务板块及其重要性，同时也强化了观众对其品牌印象，展示了其在数字城市设计领域中的领导地位和技术实力，为品牌带来科技感十足的视觉呈现。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y25',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2024.12',
+            title: 'UF咖啡 App',
+            desc: '在万物追求即时满足的数字时代，UF Cafe是一次反其道而行之的实验，保留等待与动手环节。',
+            tags: ['App设计', '咖啡', '慢生活'],
+            link: '',
+            images: ['assets/project-images/optimized/image66.jpg', 'assets/project-images/optimized/image67.jpg'],
+            overview: 'UF咖啡App，在万物追求即时满足的数字时代，是一次反其道而行之的实验。我们刻意在交互流程中保留了等待与动手的环节，因为我们相信咖啡的灵魂不仅在于入口的那一刻，更在于研磨时的期待、萃取时的专注。App采用简约温暖的设计风格，为用户带来沉浸式的手冲咖啡体验。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y15',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.10 — 2025.01',
+            title: '中建四局-智控大屏',
+            desc: '中建四局智能运营管理系统(CFIBMS)，集能耗分析和智能调优等功能于一体。',
+            tags: ['能耗分析', '智能调优', '运营管理'],
+            link: 'https://case.ufrontend.com/qichuang/cfibms_ui/#/eca',
+            images: ['assets/project-images/optimized/image68.jpg', 'assets/project-images/optimized/image70.jpg'],
+            overview: '中建四局智能运营管理系统(CFIBMS)，是一个集能耗分析和智能调优等功能于一体的综合性展示平台。系统包含建筑能耗统计、设备运行监控、智能照明控制、空调系统管理、用水用电分析等模块，通过合理规划界面布局，将元素有机融合，实现楼宇的智能化运营与精细化管理。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '后续优化需求对接', '研发跟进与测试']
+        },
+        {
+            id: 'y20',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2024.10 — 2025.11',
+            title: '问津书院小程序',
+            desc: '古典国韵风格的导览平台，精心设计动态日升月落视觉效果，根据设备时间自动调整。',
+            tags: ['国韵风格', '动态视觉', '导览平台'],
+            link: 'https://case.ufrontend.com/uf/wenjinshuyuan',
+            images: ['assets/project-images/optimized/image60.jpg', 'assets/project-images/optimized/image61.jpg', 'assets/project-images/optimized/image62.jpg', 'assets/project-images/optimized/image63.jpg', 'assets/project-images/optimized/image64.jpg'],
+            overview: '问津书院小程序采用古典国韵风格，设计主线贯穿千年历史底蕴。小程序包含历史长河、名人荟萃、历史典故、书院景点四大模块，精心设计动态日升月落视觉效果，根据用户设备时间自动调整，提供与现实世界同步的视觉体验，显著提升游客沉浸感。用户可了解问津书院的千年历史、历代名人事迹、经典典故，以及大成殿、朱子祠、孔子坐石等景点介绍。',
+            highlights: ['需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y19',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2024.09',
+            title: '知己CCBT小程序',
+            desc: '通过线上自助训练帮助用户识别认知歪曲、缓解抑郁焦虑及预防自伤行为的微信小程序。',
+            tags: ['微信小程序', '已上线', '心理健康'],
+            link: '',
+            images: [],
+            overview: '知己CCBT微信小程序，通过线上自助训练帮助用户识别认知歪曲、缓解抑郁焦虑及预防自伤行为。小程序具备初筛评估、分级预警、模块化课程干预核心功能，用户可通过心理测评、认知行为训练课程、情绪日记等方式进行自我调节，为心理健康提供专业的数字化服务。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y14',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.08 — 2024.09',
+            title: '花山数据中心配电大屏',
+            desc: '集设备告警、场景联动、视频监控与配电运维为一体的综合展示平台。',
+            tags: ['数据中心', '配电运维', '告警联动'],
+            link: 'https://case.ufrontend.com/qichuang/huashan_ui/#/dashboard',
+            images: ['assets/project-images/optimized/image59.jpg'],
+            overview: '武汉启创动力与优联前端正式签约合作，共同推进花山数据中心智慧运维大屏项目。打造集设备告警、场景联动、视频监控与配电运维为一体的综合展示平台。大屏包含设备运行状态、配电系统拓扑、告警实时推送、视频监控联动、能耗统计分析等模块，为数据中心的安全稳定运行提供全面的可视化支撑。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y13',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.07 — 2024.08',
+            title: '光谷云智慧大屏',
+            desc: '集地图、3D城市模型和动效于一体的综合性展示平台，生动的数据可视化体验。',
+            tags: ['Echarts', '3D模型', '数据可视化'],
+            link: 'https://case.ufrontend.com/qichuang/opticalvalleycloud/#/operation',
+            images: ['assets/project-images/optimized/image53.jpg', 'assets/project-images/optimized/image54.jpg', 'assets/project-images/optimized/image55.jpg', 'assets/project-images/optimized/image56.jpg', 'assets/project-images/optimized/image57.jpg', 'assets/project-images/optimized/image58.jpg'],
+            overview: '光谷云智慧大屏是一个集地图、3D城市模型和动效于一体的综合性展示平台。通过合理规划界面布局，将元素有机融合，营造和谐统一的视觉效果。大屏包含城市运行数据、产业经济、人口热力、交通流量等多维数据展示，通过前沿的前端技术和创新的设计元素，提供直观、生动的数据可视化体验。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y12',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2024.06 — 2024.08',
+            title: '年会活动大屏',
+            desc: '企业年会活动大屏系统，含后台管理、大屏展示及手机小程序端互动功能。',
+            tags: ['活动大屏', '互动系统', '小程序端'],
+            link: '',
+            images: ['assets/project-images/optimized/image48.jpg', 'assets/project-images/optimized/image49.jpg', 'assets/project-images/optimized/image50.jpg', 'assets/project-images/optimized/image51.jpg', 'assets/project-images/optimized/image52.jpg'],
+            overview: '企业年会活动大屏系统，包含后台管理、大屏展示以及手机小程序端的互动功能。系统支持签到、抽奖、弹幕互动、游戏互动等多种年会场景，为企业年会提供完整的互动解决方案，增强年会的参与感和趣味性。',
+            highlights: ['前期调研与竞品分析', '功能思维导图绘制', '需求文档输出', '开发计划制定', '项目跟进', '全流程系统测试']
+        },
+        {
+            id: 'y18',
+            cat: 'miniprogram',
+            catLabel: '小程序',
+            date: '2024.05',
+            title: '黄鹤楼导游地图小程序',
+            desc: '适配小程序与Web端的智慧导览平台，集地图、景点信息、导航指引、讲解播放于一体。',
+            tags: ['地图导览', '智慧旅游', '音频讲解'],
+            link: 'https://case.ufrontend.com/uf/webgis/index.html',
+            images: ['assets/project-images/optimized/image46.jpg'],
+            overview: '黄鹤楼景区智慧导览图，集地图、景点信息、动画贴图、导航指引以及讲解播放等多功能于一体。平台内置了专业的讲解音频资源，涵盖黄鹤楼的历史沿革、建筑风格、文化内涵等方面。用户可查看22处景点介绍，选择导航前往，播放语音讲解，实现智慧化的景区游览体验。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y23',
+            cat: 'website',
+            catLabel: '官网定制',
+            date: '2024.04',
+            title: '九州商务官网定制',
+            desc: '结合香港移民政策，设计创意的动效和互动功能，带来专业、直观、创新的浏览体验。',
+            tags: ['创意网站', '定制化', '动效交互'],
+            link: 'https://www.jzswu.com/',
+            images: ['assets/project-images/optimized/image42.jpg', 'assets/project-images/optimized/image43.jpg', 'assets/project-images/optimized/image44.jpg', 'assets/project-images/optimized/image45.jpg'],
+            overview: '优联前端为九州商务设计开发的九州商务移民网站，通过结合香港移民政策，设计创意的动效和互动功能，提升网站的整体吸引力。网站包含香港优才计划、专才计划、留学进修、创业移民、一般就业计划等服务板块，提供移民评估、成功案例展示、政策资讯等内容，为用户带来专业、直观、互动、创新的浏览体验。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y04',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2024.03',
+            title: '凝固型酸奶加工安全管理课件',
+            desc: '以游戏化形式呈现酸奶加工安全管理培训课件，使用LAYA引擎开发。',
+            tags: ['LAYA', '课件小游戏', '培训'],
+            link: 'https://case.ufrontend.com/medtime/yogurt/game/',
+            images: ['assets/project-images/optimized/image33.jpg', 'assets/project-images/optimized/image34.jpg'],
+            overview: '凝固型酸奶加工安全管理虚拟实验课件，以互动游戏的形式帮助学员掌握酸奶加工过程中的安全管理知识。学员通过模拟操作流程，学习从原料验收、杀菌、发酵到成品出库的全流程安全规范，实现寓教于乐的培训效果。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y05',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2024.03',
+            title: '诗意黄鹤楼H5小游戏',
+            desc: '诗意黄鹤微信小游戏，将传统文化与现代互动体验相结合，带来充满诗意的黄鹤楼探索之旅。',
+            tags: ['H5游戏', '文化传播', '黄鹤楼'],
+            link: 'https://case.ufrontend.com/miniprogram/officialaccounts/labourday/index.html',
+            images: ['assets/project-images/optimized/image35.jpg', 'assets/project-images/optimized/image36.jpg'],
+            overview: '诗意黄鹤微信小游戏，优联前端团队通过精心的设计与创意的实施，将传统文化与现代互动体验相结合。玩家在游戏中探索黄鹤楼的历史与文化，通过互动关卡深入了解黄鹤楼的诗词典故和建筑魅力，带来一场充满诗意和乐趣的探索之旅。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y06',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2024.03 — 2024.04',
+            title: '诗韵黄鹤楼H5',
+            desc: '探索千年诗韵，翱翔黄鹤之巅。穿越千年解锁你的前世文豪身份互动体验游戏。',
+            tags: ['H5互动', '文化传播', '游戏化'],
+            link: 'https://case.ufrontend.com/miniprogram/officialaccounts/shiyunhuanghelou/index.html',
+            images: ['assets/project-images/optimized/image37.jpg', 'assets/project-images/optimized/image38.jpg', 'assets/project-images/optimized/image39.jpg', 'assets/project-images/optimized/image40.jpg', 'assets/project-images/optimized/image41.jpg'],
+            overview: '继《诗意黄鹤》之后，再次以黄鹤楼为灵感打造穿越千年解锁你的前世文豪身份互动体验游戏。用户通过趣味问答和互动选择，解锁属于自己的前世文豪身份，深入体验黄鹤楼的历史与文化，弘扬武汉丰富的文化遗产。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y03',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2024.01 — 2024.02',
+            title: '春节祈愿小游戏',
+            desc: '新年祈愿互动小游戏，将传统节日文化与互动体验结合，带来温馨节日氛围。',
+            tags: ['祈愿', 'H5小游戏', '品牌合作'],
+            link: '',
+            images: ['assets/project-images/optimized/image28.jpg', 'assets/project-images/optimized/image29.jpg', 'assets/project-images/optimized/image30.jpg', 'assets/project-images/optimized/image31.jpg', 'assets/project-images/optimized/image32.jpg'],
+            overview: '新年祈愿互动小游戏，优联前端团队巧妙地将传统节日文化与互动体验结合。用户可写下新年愿望、抽签祈福，营造温馨的节日氛围，为品牌带来趣味化的节日营销效果。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y02',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2023.11 — 2023.12',
+            title: 'Fishing Legend SG 捕鱼游戏',
+            desc: '经典捕鱼游戏开发，使用LAYA和PIXI引擎实现流畅的游戏体验。',
+            tags: ['捕鱼游戏', 'LAYA', 'PIXI'],
+            link: '',
+            images: ['assets/project-images/optimized/image25.jpg', 'assets/project-images/optimized/image26.jpg', 'assets/project-images/optimized/image27.jpg'],
+            overview: 'Fishing Legend SG经典捕鱼游戏，使用LAYA和PIXI引擎开发，实现流畅的海底捕鱼体验，包含多种鱼类、丰富道具和特色玩法，为玩家带来轻松愉快的休闲游戏乐趣。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y11',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2023.11',
+            title: '电力监控系统大屏',
+            desc: '中建四局智控大屏，智慧楼宇电力监控，3D楼层结构动态展示，丰富图表可视化。',
+            tags: ['数字智慧大屏', 'Echarts', '3D模型', '电力大屏'],
+            link: 'https://case.ufrontend.com/qichuang/fourthcscecic/#/powerMon',
+            images: ['assets/project-images/optimized/image22.jpg', 'assets/project-images/optimized/image23.jpg'],
+            overview: '优联前端为中建四局设计开发的智控大屏平台，进行智慧楼宇电力监控。设计元素包含3D楼层结构动态展示，使用电力数据结合丰富的图表样式进行可视化展示，包含能耗分析、设备状态、告警管理、用电趋势等模块，实现楼宇电力的智能监控与管理。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y09',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2023.08',
+            title: '图书馆馆情展示系统',
+            desc: '图书馆馆情展示系统大屏，进行图书借阅监控，注重信息直观展示与用户友好性。',
+            tags: ['数字智慧大屏', 'Echarts', '图书馆'],
+            link: 'https://case.ufrontend.com/digital_library/index.html',
+            images: ['assets/project-images/optimized/image11.jpg', 'assets/project-images/optimized/image12.jpg'],
+            overview: '图书馆馆情展示系统大屏，进行图书借阅监控。大屏包含总藏书量、总借出量、实时人数统计、借还趋势图表、人群分析、流量监控、馆藏比例、借阅排行榜、实时借还动态等模块，为图书馆管理员和用户提供直观、全面的借阅数据支持。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y10',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2023.08 — 2023.10',
+            title: '碳大脑智慧管理平台',
+            desc: '集交通、林汇等碳排放监控、分析与预测于一体的综合性展示平台。',
+            tags: ['数字智慧大屏', 'Echarts', 'GIS', '碳中和'],
+            link: 'https://ufrontend.com/case/casedetail/case-tdn',
+            images: ['assets/project-images/optimized/image13.jpg', 'assets/project-images/optimized/image14.jpg', 'assets/project-images/optimized/image15.jpg', 'assets/project-images/optimized/image16.jpg', 'assets/project-images/optimized/image17.jpg', 'assets/project-images/optimized/image18.jpg', 'assets/project-images/optimized/image19.jpg', 'assets/project-images/optimized/image20.jpg', 'assets/project-images/optimized/image21.jpg'],
+            overview: '碳大脑智慧管理平台大屏，响应国家双碳战略，打造全域数据监控的碳大脑指挥舱。以GIS空间地图为基座，高维整合各省市的能源消耗、实时碳排放量、减排潜力等海量业务指标，集交通、林汇等碳排放监控、分析与预测于一体，实现从碳足迹追踪到碳达峰预测的全链路宏观决策支撑。创新性引入空间折叠机制，用户可在2D精细分析与3D沉浸指挥两种模式间自由切换。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y08',
+            cat: 'screen',
+            catLabel: '智慧大屏',
+            date: '2023.06 — 2023.08',
+            title: '园区消防安保管控平台',
+            desc: '优联前端设计开发的园区消防安保管控平台，Thing.js三维交互，消防大屏可视化。',
+            tags: ['数字智慧大屏', 'Thing.js', '三维交互'],
+            link: 'https://case.ufrontend.com/3d/fire_safety_screen/',
+            images: ['assets/project-images/optimized/image5.jpg', 'assets/project-images/optimized/image6.jpg', 'assets/project-images/optimized/image7.jpg', 'assets/project-images/optimized/image8.jpg', 'assets/project-images/optimized/image9.jpg', 'assets/project-images/optimized/image10.jpg'],
+            overview: '园区消防安保管控平台，优联前端设计开发，使用Thing.js实现三维交互效果。平台集成3D园区模型、消防设备监控、安保巡更系统、实时告警联动等功能，进行园区消防安保的可视化管控展示，为园区安全管理提供全面的数字化支撑。',
+            highlights: ['需求沟通与项目报价', '需求文档输出全流程', '开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+        {
+            id: 'y01',
+            cat: 'game',
+            catLabel: '游戏/H5',
+            date: '2023.04 — 2023.06',
+            title: 'VR丧尸游戏 The Walking Dead',
+            desc: '炎炎夏日突发海啸，惊涛骇浪夹杂着大批丧尸袭来，众人齐心协力反击保卫家园。',
+            tags: ['3D Game', 'VR', 'LAYA'],
+            link: '',
+            images: ['assets/project-images/optimized/image2.jpg', 'assets/project-images/optimized/image3.jpg', 'assets/project-images/optimized/image4.jpg'],
+            overview: 'VR丧尸游戏《The Walking Dead》，炎炎夏日突发海啸，惊涛骇浪夹杂着大批丧尸向岸边袭来，众人齐心协力发起反击，最终击退丧尸保卫家园。使用LAYA引擎开发的3D VR射击游戏，带来沉浸式的末日生存体验。',
+            highlights: ['开发计划制定', '项目跟进', '全流程系统测试', '相关文档输出']
+        },
+    ];
+
+    // Category labels map
+    const catLabelMap = {
+        all: '全部',
+        game: '游戏/H5',
+        screen: '智慧大屏',
+        miniprogram: '小程序',
+        website: '官网定制'
+    };
+
+    // Sort projects by date descending
+    youlianProjects.sort((a, b) => {
+        const dateA = a.date.split(' — ')[0];
+        const dateB = b.date.split(' — ')[0];
+        return dateB.localeCompare(dateA);
+    });
+
+    // Render Youlian timeline
+    function renderYoulianTimeline(filter = 'all') {
+        const timeline = document.getElementById('ul-timeline');
+        if (!timeline) return;
+
+        const filtered = filter === 'all'
+            ? youlianProjects
+            : youlianProjects.filter(p => p.cat === filter);
+
+        timeline.innerHTML = filtered.map((p, i) => `
+            <div class="ul-timeline-item" data-cat="${p.cat}" style="transition-delay: ${i * 0.08}s">
+                <div class="ul-timeline-dot"></div>
+                <div class="ul-timeline-card" onclick="openYoulianProject('${p.id}')">
+                    <div class="ul-timeline-meta">
+                        <span class="ul-timeline-date">${p.date}</span>
+                        <span class="ul-timeline-cat ${p.cat}">${p.catLabel}</span>
+                    </div>
+                    <div class="ul-timeline-title">${p.title}</div>
+                    <div class="ul-timeline-desc">${p.desc}</div>
+                    <div class="ul-timeline-tags">
+                        ${p.tags.map(t => `<span class="ul-timeline-tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Animate in
+        setTimeout(() => {
+            document.querySelectorAll('.ul-timeline-item').forEach((item, i) => {
+                setTimeout(() => item.classList.add('visible'), i * 80);
+            });
+        }, 50);
+    }
+
+    // Category filter handler
+    function initYoulianFilter() {
+        const filterBtns = document.querySelectorAll('.ul-cat-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.cat;
+                renderYoulianTimeline(cat);
+            });
+        });
+    }
+
+    // ============================================
+    // WORK GROUP TOGGLE
+    // ============================================
+    function toggleGroup(headerEl) {
+        const group = headerEl.parentElement;
+        const list = group.querySelector('.work-group-list');
+        
+        if (group.classList.contains('collapsed')) {
+            group.classList.remove('collapsed');
+            // 先设置为 scrollHeight 实现展开动画
+            list.style.maxHeight = list.scrollHeight + 'px';
+            setTimeout(() => {
+                list.style.maxHeight = '3000px';
+                if (typeof ScrollTrigger !== 'undefined') {
+                    ScrollTrigger.refresh();
+                }
+            }, 600);
+        } else {
+            // 先设置为当前 scrollHeight，再触发收缩
+            list.style.maxHeight = list.scrollHeight + 'px';
+            // 强制重排
+            void list.offsetHeight;
+            list.style.maxHeight = '0';
+            group.classList.add('collapsed');
+            setTimeout(() => {
+                if (typeof ScrollTrigger !== 'undefined') {
+                    ScrollTrigger.refresh();
+                }
+            }, 600);
+        }
+    }
+
+    function initGroups() {
+        const groups = document.querySelectorAll('.work-group');
+        const isMobile = window.innerWidth < 768;
+        
+        groups.forEach((group, i) => {
+            const list = group.querySelector('.work-group-list');
+            if (isMobile) {
+                if (i === 0) {
+                    list.style.maxHeight = list.scrollHeight + 'px';
+                    setTimeout(() => { list.style.maxHeight = '3000px'; }, 100);
+                } else {
+                    group.classList.add('collapsed');
+                    list.style.maxHeight = '0';
+                }
+            } else {
+                list.style.maxHeight = '3000px';
+            }
+        });
+
+        // Init Youlian timeline & filter
+        setTimeout(() => {
+            renderYoulianTimeline('game');
+            initYoulianFilter();
+        }, 100);
+    }
+
+    // ============================================
+    // PROJECT DATA & DETAIL
+    // ============================================
+    const projects = [
+        {
+            title: '待补充项目名称',
+            company: '武汉优联前端科技有限公司',
+            role: '产品助理',
+            period: '202X — 202X',
+            tags: ['产品', '待补充'],
+            tech: ['待补充'],
+            overview: '✏️ 待补充项目概述',
+            highlights: ['✏️ 待补充核心职责与成果']
+        },
+        {
+            title: 'TShow 商显广告平台 / 广告 APK',
+            company: '深圳中维神目科技有限公司湖北分公司',
+            role: '测试工程师',
+            period: '2021.12 — 2023.01',
+            tags: ['商显广告', 'Android', 'TCL 外包'],
+            tech: ['Web平台', 'Android APK', '设备接入协议', '系统测试'],
+            overview: '属 TCL 外包项目，接入电视或广告机设备，进行设备管理、广告屏幕拼接设置、广告内容管理、广告任务发布及数据统计等功能。广告 APK 安装于定制化广告 Android 设备上，实现广告本地播放，或配置平台，接收平台下发的广告进行广告任务播放。',
+            highlights: [
+                '进行 TShow 商显广告平台的设备接入协议接口测试，整体系统功能测试',
+                '进行广告 APK 基本功能测试，平台与 APK、设备重启、关机、截屏、log 获取等指令兼容性测试',
+                '编写 Web 平台测试方案、测试用例并执行，输出测试报告与各类文档'
+            ]
+        },
+        {
+            title: 'AIcraft 人工智能开发平台',
+            company: '深圳中维神目科技有限公司湖北分公司',
+            role: '测试工程师',
+            period: '2021.12 — 2023.01',
+            tags: ['AI 平台', '模型训练', '可视化'],
+            tech: ['Creator', 'Builder', 'Hub', 'AI模型训练', '可视化'],
+            overview: '属济南中维世纪开发者计划项目，整个平台分三大部分：Creator 导入数据集，通过图形化界面实现数据标注、训练、测试以及模型输出的整个过程；Builder 使用可视化操作方式将 Creator 训练好的 AI 模型与其他基础文件集成为视觉设备上可执行的应用文件；Hub 用于管理 AI 算法仓及应用文件。',
+            highlights: [
+                '进行 AIcraft 平台所有模块功能测试，训练可视化逻辑测试',
+                '训练大屏监控接口数据测试',
+                '编写测试方案、测试用例，输出测试报告与各类技术文档'
+            ]
+        },
+        {
+            title: 'DeepCloud 中控平台 / 小神 App',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2019.02 — 2021.11',
+            tags: ['中控平台', '人脸识别', 'iOS App'],
+            tech: ['DeepCloud', 'iOS', 'P2P视频', '人脸识别', '告警推送'],
+            overview: 'DeepCloud 中控平台根据不同类型的前端设备进行定制化接入，进行前端人脸识别等参数云端同步设置、数据存储、识别、聚类、搜索、大屏展示，并结合小神 App 进行 VIP、员工、疑犯等通知推送。小神 App 是 DeepCloud 平台的手机移动端，可进行抓拍机与 NVR 的 P2P 视频观看对讲、人脸数据查询、告警等功能。',
+            highlights: [
+                '进行 DeepCloud 中控平台的设备接入协议测试，设备基本功能测试，整体系统测试',
+                '参与系统平台 Web 端与 App 端测试用例设计、编写、执行',
+                '编写平台系统各类文档',
+                '人脸数据查询与告警推送功能测试'
+            ]
+        },
+        {
+            title: '中移智慧营业厅平台',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2019.02 — 2021.11',
+            tags: ['新零售', '郑州移动', '外包项目'],
+            tech: ['爱买平台', '第三方抓拍机', '人脸识别', '大屏展示'],
+            overview: '属郑州移动外包项目，根据郑州移动定制化需求，基于爱买平台框架进行定制化开发，并接入第三方抓拍机，实现线下门店人脸抓拍图片上传存储、识别、聚类及大屏展示等功能。',
+            highlights: [
+                '进行中移智慧营业厅平台的设备接入协议测试，整体系统测试',
+                '第三方抓拍机接入兼容性测试',
+                '参与测试用例设计、编写与执行，输出测试报告'
+            ]
+        },
+        {
+            title: '测温人脸识别门禁',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2020 — 2021',
+            tags: ['门禁设备', '测温', '疫情防控'],
+            tech: ['人脸识别', '测温算法', 'DeepCloud对接', '固件测试'],
+            overview: '根据疫情防控需求研发的产品，可进行人脸识别、测温，并对接 DeepCloud 平台进行数据上传。',
+            highlights: [
+                '进行测温人脸识别门禁接入 DeepCloud 平台的协议测试',
+                '设备前端固件功能测试',
+                '人脸识别算法与测温算法测试',
+                '后续的固件迭代优化测试'
+            ]
+        },
+        {
+            title: 'AIshop 爱买新零售平台',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2018.07 — 2019.01',
+            tags: ['新零售', '客流统计', '人脸识别'],
+            tech: ['客流统计', '分布式识别', '人脸聚类', '人脸抓拍机'],
+            overview: '接入人脸抓拍设备及客流统计设备，进行门店客流的统计、分布式人脸识别与聚类等功能。',
+            highlights: [
+                '平台用例评审编写，执行用例测试与系统测试',
+                '设备接入平台协议测试',
+                '人脸识别算法测试，测试文档设计编写',
+                '收集测试数据对接算法工程师，协助算法迭代优化'
+            ]
+        },
+        {
+            title: '人脸抓拍机 / 比对机 / NVR 系列',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2018.07 — 2019.01',
+            tags: ['安防硬件', '算法测试', '海思芯片'],
+            tech: ['海思Hi3516', '旷视', '商汤', '海康', 'ROC曲线', 'Python'],
+            overview: '人脸抓拍机集成自有人脸识别算法进行人脸抓拍；人脸比对机可录入 VIP/白名单/黑名单，进行人脸识别/比对/告警；人脸抓拍识别 NVR 根据不同硬件规格，接入多路普通摄像机视频流进行视频人脸抓拍识别。',
+            highlights: [
+                '前端硬件抓拍机/比对机/抓拍识别 NVR 的算法接入功能测试',
+                '海思 Hi3516AV200/DV300/CV500 不同硬件抓拍机人脸识别算法性能测试',
+                '进行旷视/商汤/海康抓拍机与自有人脸抓拍算法比对测试',
+                '根据算法模型数据进行 Python 脚本编写，生成 ROC 曲线直观展示各类算法性能'
+            ]
+        },
+        {
+            title: '签颜 / 阅片系统',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2017.07 — 2018.06',
+            tags: ['签到系统', '视频检索', 'FTP'],
+            tech: ['人脸识别签到', 'FTP协议', '视频检索', '人脸比对'],
+            overview: '签颜是人脸识别签到系统，使用 FTP 协议上传人脸。阅片系统在大量视频中查找指定人员，当录入的被查找人员出现在某个视频中，截取视频中相似的人脸生成对比阈值。',
+            highlights: [
+                '负责项目整体后端与前端的测试',
+                '用户体验测试与改良方案提出',
+                '编写各类指令操作文档、测试文档、使用文档'
+            ]
+        },
+        {
+            title: '侦颜 — 犯罪人轨迹追踪系统',
+            company: '武汉幻视智能科技有限公司',
+            role: '测试工程师',
+            period: '2017.05 — 2017.07',
+            tags: ['公安安防', '私有化部署', '轨迹分析'],
+            tech: ['公安视频专网', '私有化部署', '人脸识别', '轨迹分析'],
+            overview: '与公安机关合作，使用公安视频专网添加街道卡口摄像头视频流到侦颜系统，共享公安犯罪嫌疑人证件库，使用人脸识别技术，根据指定阈值识别犯罪嫌疑人并警报，系统生成犯罪人活动轨迹，从而获取逃犯信息并实施抓捕行动。',
+            highlights: [
+                '在项目现场远程协助进行本地私有化系统及必备软件安装',
+                '负责项目整体后端与前端的测试',
+                '用户体验测试与改良方案提出',
+                '编写各类指令操作文档、测试文档、使用文档'
+            ]
+        },
+        {
+            title: 'PetKollar 宠物智能穿戴 App',
+            company: '联思普瑞（武汉）电子科技有限公司',
+            role: 'iOS 软件工程师',
+            period: '2016 — 2017',
+            tags: ['iOS', '智能硬件', '美国上线'],
+            tech: ['iOS / Swift', 'BLE蓝牙', '数据可视化', 'App Store'],
+            overview: '用于宠物智能穿戴设备远程控制及运动量数据获取与可视化的 iOS 应用，已在美国 App Store 上线。',
+            highlights: [
+                '负责 iOS 端 App 整体开发与测试',
+                '蓝牙设备连接与数据同步功能开发',
+                '运动数据可视化图表实现',
+                '美国 App Store 上线发布'
+            ]
+        },
+        {
+            title: '神目 App — P2P 摄像头管理',
+            company: '联思普瑞（武汉）电子科技有限公司',
+            role: 'iOS 软件工程师',
+            period: '2015 — 2017',
+            tags: ['iOS 开发', '视频监控', 'P2P'],
+            tech: ['iOS / Swift', 'P2P视频', '告警通知', 'App Store'],
+            overview: '用于 P2P 摄像头管理、视频播放及视频触发告警通知的 iOS 应用，App Store 已上线。',
+            highlights: [
+                'P2P 摄像头视频实时播放功能开发',
+                '视频触发告警通知功能实现',
+                '负责 iOS 版本 App 整体测试与 bug 定位修复',
+                'App Store 上线发布与版本迭代'
+            ]
+        },
+        {
+            title: 'Blue Switch 智能开关 App',
+            company: '联思普瑞（武汉）电子科技有限公司',
+            role: 'iOS 软件工程师',
+            period: '2016',
+            tags: ['iOS 开发', '智能家居', '创客'],
+            tech: ['iOS / Swift', '蓝牙控制', '继电器开关', '创客'],
+            overview: '为创客研发使用的继电器开关控制工具 App，App Store 已上线。',
+            highlights: [
+                '蓝牙连接与开关控制功能开发',
+                '开关定时与场景模式实现',
+                '负责 App 整体测试与上线',
+                'App Store 已上线'
+            ]
+        }
+    ];
+
+    let currentProjectIndex = 0;
+
+    function openProject(index) {
+        currentProjectIndex = index;
+        const project = projects[index];
+        const panel = document.getElementById('project-detail');
+        const inner = document.getElementById('project-detail-inner');
+
+        inner.innerHTML = `
+            <div class="project-detail-meta">
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">所属公司</span>
+                    <span class="project-detail-meta-value">${project.company}</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">担任职位</span>
+                    <span class="project-detail-meta-value">${project.role}</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">时间</span>
+                    <span class="project-detail-meta-value">${project.period}</span>
+                </div>
+            </div>
+            <h2 class="project-detail-title">${project.title}</h2>
+            <div class="project-detail-tags">
+                ${project.tags.map(tag => `<span class="project-detail-tag">${tag}</span>`).join('')}
+            </div>
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">项目概述</div>
+                <p>${project.overview}</p>
+            </div>
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">核心职责与成果</div>
+                <ul>
+                    ${project.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">技术栈</div>
+                <div class="project-detail-tags">
+                    ${project.tech.map(t => `<span class="project-detail-tag">${t}</span>`).join('')}
+                </div>
+            </div>
+            <div class="project-detail-nav">
+                <button class="project-detail-nav-btn" onclick="navProject(-1)" ${index === 0 ? 'style="opacity:0.3;pointer-events:none;"' : ''}>
+                    ← 上一个项目
+                </button>
+                <button class="project-detail-nav-btn" onclick="navProject(1)" ${index === projects.length - 1 ? 'style="opacity:0.3;pointer-events:none;"' : ''}>
+                    下一个项目 →
+                </button>
+            </div>
+        `;
+
+        if (panel.classList.contains('open')) {
+            inner.style.transition = 'none';
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(30px)';
+            void inner.offsetWidth;
+            inner.style.transition = '';
+            inner.style.opacity = '';
+            inner.style.transform = '';
+        } else {
+            panel.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Stacked Card Carousel
+    let carouselState = { current: 0, images: [] };
+
+    function initCarousel(images) {
+        carouselState.images = images.length > 0 ? images : ['placeholder'];
+        carouselState.current = 0;
+        renderCarousel();
+    }
+
+    function renderCarousel() {
+        const track = document.querySelector('.project-carousel-track');
+        const indicators = document.querySelector('.carousel-indicators');
+        if (!track) return;
+
+        const imgs = carouselState.images;
+        const total = imgs.length;
+
+        track.innerHTML = imgs.map((img, i) => {
+            const isPlaceholder = img === 'placeholder';
+            return `
+                <div class="carousel-card" data-index="${i}" onclick="goToSlide(${i})">
+                    ${isPlaceholder 
+                        ? '<div class="carousel-card-placeholder">暂无项目图片<br>上传图片后将在此展示</div>'
+                        : `<img src="${img}" alt="项目图片 ${i + 1}" loading="lazy">`
+                    }
+                </div>
+            `;
+        }).join('');
+
+        // Update positions
+        updateCarouselPositions();
+
+        // Indicators
+        if (indicators) {
+            indicators.innerHTML = imgs.map((_, i) => 
+                `<div class="carousel-dot ${i === carouselState.current ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+            ).join('');
+        }
+    }
+
+    function updateCarouselPositions() {
+        const cards = document.querySelectorAll('.carousel-card');
+        const total = cards.length;
+        if (total === 0) return;
+
+        cards.forEach((card, i) => {
+            let offset = i - carouselState.current;
+            if (offset > total / 2) offset -= total;
+            if (offset < -total / 2) offset += total;
+
+            if (Math.abs(offset) <= 2) {
+                card.dataset.pos = offset;
+            } else {
+                card.dataset.pos = 'hidden';
+            }
+        });
+    }
+
+    function nextSlide(e) {
+        if (e) e.stopPropagation();
+        carouselState.current = (carouselState.current + 1) % carouselState.images.length;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function prevSlide(e) {
+        if (e) e.stopPropagation();
+        carouselState.current = (carouselState.current - 1 + carouselState.images.length) % carouselState.images.length;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function goToSlide(index) {
+        carouselState.current = index;
+        updateCarouselPositions();
+        updateIndicators();
+    }
+
+    function updateIndicators() {
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === carouselState.current);
+        });
+    }
+
+    // Open Youlian project
+    function openYoulianProject(id) {
+        const project = youlianProjects.find(p => p.id === id);
+        if (!project) return;
+
+        const panel = document.getElementById('project-detail');
+        const inner = document.getElementById('project-detail-inner');
+
+        inner.innerHTML = `
+            <div class="project-detail-meta">
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">所属公司</span>
+                    <span class="project-detail-meta-value">武汉优联前端科技有限公司</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">项目类型</span>
+                    <span class="project-detail-meta-value">${project.catLabel}</span>
+                </div>
+                <div class="project-detail-meta-item">
+                    <span class="project-detail-meta-label">时间</span>
+                    <span class="project-detail-meta-value">${project.date}</span>
+                </div>
+            </div>
+            <h2 class="project-detail-title">${project.title}</h2>
+            <div class="project-detail-tags">
+                ${project.tags.map(tag => `<span class="project-detail-tag">${tag}</span>`).join('')}
+            </div>
+
+            <!-- Stacked Card Carousel -->
+            <div class="project-carousel">
+                <div class="project-carousel-track"></div>
+                <button class="carousel-nav prev" onclick="prevSlide(event)">‹</button>
+                <button class="carousel-nav next" onclick="nextSlide(event)">›</button>
+                <div class="carousel-indicators"></div>
+            </div>
+
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">项目概述</div>
+                <p>${project.overview}</p>
+            </div>
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">核心职责与成果</div>
+                <ul>
+                    ${project.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+            </div>
+            ${project.link ? `
+            <div class="project-detail-section">
+                <div class="project-detail-section-label">访问链接</div>
+                <a href="${project.link}" target="_blank" rel="noopener noreferrer" style="color: rgba(255,255,255,0.8); text-decoration: underline; word-break: break-all;">${project.link}</a>
+            </div>
+            ` : ''}
+        `;
+
+        // Init carousel
+        setTimeout(() => initCarousel(project.images || []), 50);
+
+        if (panel.classList.contains('open')) {
+            inner.style.transition = 'none';
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(30px)';
+            void inner.offsetWidth;
+            inner.style.transition = '';
+            inner.style.opacity = '';
+            inner.style.transform = '';
+        } else {
+            panel.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeProject() {
+        const panel = document.getElementById('project-detail');
+        panel.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function navProject(direction) {
+        const nextIndex = currentProjectIndex + direction;
+        if (nextIndex >= 0 && nextIndex < projects.length) {
+            const inner = document.getElementById('project-detail-inner');
+            
+            inner.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            inner.style.opacity = '0';
+            inner.style.transform = direction > 0 ? 'translateY(-20px)' : 'translateY(20px)';
+            
+            setTimeout(() => {
+                openProject(nextIndex);
+            }, 200);
+        }
+    }
+
+    // Close on background click
+    document.getElementById('project-detail').addEventListener('click', (e) => {
+        if (e.target.classList.contains('project-detail') || 
+            e.target.classList.contains('project-detail-bg')) {
+            closeProject();
+        }
+    });
+
+    // Keyboard nav
+    document.addEventListener('keydown', (e) => {
+        const panel = document.getElementById('project-detail');
+        if (!panel.classList.contains('open')) return;
+        
+        if (e.key === 'Escape') closeProject();
+        if (e.key === 'ArrowLeft') navProject(-1);
+        if (e.key === 'ArrowRight') navProject(1);
+    });
+
+    // ============================================
+    // COPY EMAIL
+    // ============================================
+    function copyEmail() {
+        const email = '1055204250@qq.com';
+        navigator.clipboard.writeText(email).then(() => {
+            const el = document.querySelector('.contact-email');
+            const original = el.textContent;
+            el.textContent = '✓ 已复制到剪贴板';
+            setTimeout(() => { el.textContent = original; }, 2000);
+        }).catch(() => {
+            window.location.href = 'mailto:' + email;
+        });
+    }
+
+    // ============================================
+    // MOUSE TRAIL ANIMATION
+    // ============================================
+    (function() {
+        const canvas = document.getElementById('mouse-trail');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let mouseX = -100;
+        let mouseY = -100;
+        let pendingX = null;
+        let pendingY = null;
+        let lastDrawnX = 0;
+        let lastDrawnY = 0;
+        let trail = [];
+        const maxTrailLength = 40;
+        
+        function resize() {
+            width = canvas.width = window.innerWidth * window.devicePixelRatio;
+            height = canvas.height = window.innerHeight * window.devicePixelRatio;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        
+        resize();
+        window.addEventListener('resize', resize);
+        
+        document.addEventListener('mousemove', (e) => {
+            pendingX = e.clientX;
+            pendingY = e.clientY;
+        });
+        
+        document.addEventListener('mouseleave', () => {
+            pendingX = -100;
+            pendingY = -100;
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                pendingX = e.touches[0].clientX;
+                pendingY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', () => {
+            pendingX = -100;
+            pendingY = -100;
+        });
+        
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            
+            // 更新轨迹点
+            if (pendingX !== null && pendingX > -50 && pendingY > -50) {
+                const dx = pendingX - lastDrawnX;
+                const dy = pendingY - lastDrawnY;
+                const dist = Math.hypot(dx, dy);
+                const steps = Math.max(1, Math.ceil(dist / 25));
+                for (let i = 1; i <= steps; i++) {
+                    const t = i / steps;
+                    trail.push({
+                        x: lastDrawnX + dx * t,
+                        y: lastDrawnY + dy * t
+                    });
+                    if (trail.length > maxTrailLength) trail.shift();
+                }
+                lastDrawnX = pendingX;
+                lastDrawnY = pendingY;
+                pendingX = null;
+            } else if (pendingX !== null && pendingX < -50) {
+                trail.length = 0;
+                pendingX = null;
+            } else {
+                if (trail.length > 0) trail.shift();
+            }
+            
+            if (trail.length < 2) {
+                requestAnimationFrame(animate);
+                return;
+            }
+            
+            // 逐段绘制，每段 alpha 按位置渐变（头透明尾不透明）
+            for (let i = 1; i < trail.length; i++) {
+                const progress = i / trail.length;
+                const alpha = progress * progress * 0.7;
+                ctx.beginPath();
+                ctx.moveTo(trail[i - 1].x, trail[i - 1].y);
+                ctx.lineTo(trail[i].x, trail[i].y);
+                ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+                ctx.lineWidth = 1 + progress * 0.8;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+            
+            const lastPoint = trail[trail.length - 1];
+            ctx.beginPath();
+            ctx.arc(lastPoint.x, lastPoint.y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+            ctx.fill();
+            
+            const pulseSize = 5 + Math.sin(Date.now() / 200) * 1.5;
+            ctx.beginPath();
+            ctx.arc(lastPoint.x, lastPoint.y, pulseSize, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.18)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            requestAnimationFrame(animate);
+        }
+        
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (!isTouchDevice) {
+            animate();
+        } else {
+            let touchAnimating = false;
+            document.addEventListener('touchstart', () => {
+                if (!touchAnimating) {
+                    touchAnimating = true;
+                    animate();
+                }
+            });
+        }
+    })();
+
+    // Fallback: ensure all content is visible if GSAP fails
+    setTimeout(() => {
+        try {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') return;
+        } catch(e) {}
+        document.querySelectorAll('.skill-item, .work-group, .about-avatar-wrap, .about-quote, .about-bio > *, .about-stat, .contact-inner > *').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+        });
+        document.querySelectorAll('.section-title .line').forEach(el => {
+            el.style.transform = 'translateY(0)';
+        });
+    }, 1500);
+    </script>
+</body>
+</html>
