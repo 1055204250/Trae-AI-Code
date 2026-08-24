@@ -1092,6 +1092,47 @@
             color: var(--gray-500);
         }
 
+        /* Youlian Doc Link */
+        .ul-doc-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin: 2rem 0 0;
+            padding: 0.85rem 1.25rem;
+            background: var(--gray-50);
+            border: 1px dashed var(--gray-300);
+            border-radius: 10px;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ul-doc-link:hover {
+            background: #fff;
+            border-color: var(--gray-900);
+            border-style: solid;
+            color: var(--gray-900);
+            transform: translateY(-1px);
+        }
+
+        .ul-doc-link-icon {
+            font-size: 1rem;
+        }
+
+        .ul-doc-link-text {
+            font-weight: 500;
+        }
+
+        .ul-doc-link-arrow {
+            transition: transform 0.3s var(--ease-out);
+        }
+
+        .ul-doc-link:hover .ul-doc-link-arrow {
+            transform: translateX(4px);
+        }
+
         /* Project Detail Modal */
         .project-detail {
             position: fixed;
@@ -1836,6 +1877,11 @@
                 padding: 0.2rem 0.5rem;
             }
 
+            .ul-doc-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.78rem;
+            }
+
             /* Carousel Mobile */
             .project-carousel {
                 height: 300px;
@@ -1962,6 +2008,18 @@
                 padding: 0.15rem 0.4rem;
             }
 
+            .ul-doc-link {
+                flex-wrap: wrap;
+                text-align: center;
+                gap: 0.4rem;
+                font-size: 0.72rem;
+                padding: 0.65rem 0.85rem;
+            }
+
+            .ul-doc-link-text {
+                width: 100%;
+            }
+
             /* Carousel 480px */
             .project-carousel {
                 height: 260px;
@@ -2046,7 +2104,7 @@
                 <span class="hero-title-line"><span>与品质守护者</span></span>
             </h1>
             <p class="hero-subtitle">
-                9 年互联网经验，从 iOS 开发到测试工程再到产品助理，
+                10 余年互联网经验，从 iOS 开发到测试工程再到产品助理，
                 专注于用技术思维驱动产品体验升级。
             </p>
             <a href="#works" class="hero-cta">
@@ -2094,11 +2152,11 @@
             </div>
             <div class="about-stats">
                 <div class="about-stat">
-                    <div class="about-stat-num">9+</div>
+                    <div class="about-stat-num">10+</div>
                     <div class="about-stat-label">年从业经验</div>
                 </div>
                 <div class="about-stat">
-                    <div class="about-stat-num">13</div>
+                    <div class="about-stat-num">30+</div>
                     <div class="about-stat-label">参与项目</div>
                 </div>
                 <div class="about-stat">
@@ -2149,6 +2207,13 @@
                     <div class="ul-timeline" id="ul-timeline">
                         <!-- Timeline items will be rendered by JS -->
                     </div>
+
+                    <!-- 完整履历文档入口 -->
+                    <a class="ul-doc-link" href="https://my.feishu.cn/file/AndhbHb4KovfJQxnM1Sc5E9wn1D?from=from_copylink" target="_blank" rel="noopener noreferrer">
+                        <span class="ul-doc-link-icon">📄</span>
+                        <span class="ul-doc-link-text">查看优联前端完整项目履历（飞书文档）</span>
+                        <span class="ul-doc-link-arrow">→</span>
+                    </a>
                 </div>
             </div>
 
